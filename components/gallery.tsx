@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 
 export function Gallery() {
-  const images = ["manul2", "manul3", "manul4"];
   return (
     <section id="gallery" className="py-24">
       <div className="container mx-auto px-4">
@@ -14,8 +13,8 @@ export function Gallery() {
           <p className="text-lg text-muted-foreground mb-12 text-center leading-relaxed"></p>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {images.map((img: string, index) => (
-              <GalleryFrame img={img} key={`gal` + index} />
+            {Array.from({ length: 17 }, (_, i) => (
+              <GalleryFrame img={`${i + 1}`} key={i + 1} />
             ))}
           </div>
         </div>
@@ -29,9 +28,9 @@ const GalleryFrame = ({ img }: { img: string }) => {
     <div className="bg-muted/30 rounded-2xl">
       <div className="relative h-80 rounded-lg overflow-hidden group">
         <img
-          src={`/${img}.png`}
+          src={`/gallery/${img}.png`}
           alt="manul"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
         />
         <Button className="absolute right-4 bottom-4">
           <Link href={`/${img}.png`} download={true}>
