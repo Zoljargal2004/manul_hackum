@@ -14,7 +14,7 @@ export default function Page() {
       <About />
       <Company />
       {/* <Habitat /> */}
-      {/* <CreateCatSection /> */}
+      <CreateCatSection />
       <Gallery />
     </div>
   );

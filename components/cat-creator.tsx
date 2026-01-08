@@ -1,16 +1,81 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import Paint from "./paint";
 
 export function CatCreator() {
-  const [furColor, setFurColor] = useState("#A0826D");
-  const [eyeColor, setEyeColor] = useState("#FFD700");
-  const [fluffiness, setFluffiness] = useState([50]);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const [baseSrc] = useState("/create-cat/base.png");
+  const [layers, setLayers] = useState({
+    eyebrows: "/create-cat/eyebrows/1.svg",
+    nose: "/create-cat/nose/1.svg",
+    eye: "/create-cat/eye/1.svg",
+    stain: "/create-cat/stain/1.svg",
+    fang: "/create-cat/fang/1.svg",
+    mouth: "/create-cat/mouth/1.svg",
+    naruto_beard: "/create-cat/naruto-beard/1.svg",
+    beard: "/create-cat/beard/1.svg",
+  });
+  useEffect(() => {
+    drawCanvas();
+  }, [layers]);
+  const drawCanvas = async () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    await drawImage(ctx, baseSrc);
+
+    await drawImage(ctx, layers.eyebrows, 570, 240, 520, 134);
+    await drawImage(ctx, layers.mouth, 815, 439, 109, 142);
+    await drawImage(ctx, layers.fang, 810, 483, 119, 49);
+    await drawImage(ctx, layers.nose, 754, 418, 212, 116);
+    await drawImage(ctx, layers.naruto_beard, 453, 367, 779, 253);
+    await drawImage(ctx, layers.beard, 354, 327, 951, 284);
+    await drawImage(ctx, layers.eye, 600, 273, 477, 224);
+    await drawImage(ctx, layers.stain, 761, 247, 100, 76);
+  };
+  const drawImage = (
+    ctx: CanvasRenderingContext2D,
+    src: string,
+    x: number = 0,
+    y: number = 0,
+    width?: number,
+    height?: number
+  ): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        resolve();
+        return;
+      }
+
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      if(!src){
+        resolve()
+        return
+      }
+      img.src = src;
+
+      img.onload = () => {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+
+        if (width && height) {
+          ctx.drawImage(img, x, y, width, height);
+        } else {
+          ctx.drawImage(img, x, y, img.width, img.height);
+        }
+
+        resolve();
+      };
+
+      img.onerror = () => reject(`Failed to load ${src}`);
+    });
+  };
 
   return (
     <section className="min-h-screen py-20 px-4">
@@ -19,87 +84,40 @@ export function CatCreator() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Персона үүсгэх
           </h1>
-          {/* <p className="text-xl text-muted-foreground">Өөр</p> */}
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 items-start">
-          <Paint />
-          {/* Right side - Creation controls */}
+          <div className="p-8">
+            <canvas
+              ref={canvasRef}
+              width={1408}
+              height={1304}
+              className="w-full aspect-square"
+            />
+          </div>
           <div className="order-1 md:order-2 space-y-6">
             <Card className="p-6">
-              <h2 className="text-2xl font-bold mb-6">Customize Your Cat</h2>
+              <h2 className="text-2xl font-bold mb-6">Custommm</h2>
 
-              <div className="space-y-6">
-                {/* Fur Color */}
-                <div className="space-y-3">
-                  <Label htmlFor="fur-color" className="text-base">
-                    Fur Color
-                  </Label>
-                  <div className="flex gap-4 items-center">
-                    <input
-                      id="fur-color"
-                      type="color"
-                      value={furColor}
-                      onChange={(e) => setFurColor(e.target.value)}
-                      className="h-12 w-20 rounded cursor-pointer border-2 border-border"
-                    />
-                    <span className="text-sm text-muted-foreground">
-                      {furColor}
-                    </span>
-                  </div>
-                </div>
+              {/* eyebrows */}
 
-                {/* Eye Color */}
-                <div className="space-y-3">
-                  <Label htmlFor="eye-color" className="text-base">
-                    Eye Color
-                  </Label>
-                  <div className="flex gap-4 items-center">
-                    <input
-                      id="eye-color"
-                      type="color"
-                      value={eyeColor}
-                      onChange={(e) => setEyeColor(e.target.value)}
-                      className="h-12 w-20 rounded cursor-pointer border-2 border-border"
-                    />
-                    <span className="text-sm text-muted-foreground">
-                      {eyeColor}
-                    </span>
-                  </div>
-                </div>
+              <Option
+                filename="1.svg"
+                dest="eyebrows"
+                setComp={(val) => setLayers({ ...layers, eyebrows: val })}
+              />
+              <Option
+                filename="2.svg"
+                dest="eyebrows"
+                setComp={(val) => setLayers({ ...layers, eyebrows: val })}
+              />
+              <Option
+                filename="3.svg"
+                dest="eyebrows"
+                setComp={(val) => setLayers({ ...layers, eyebrows: val })}
+              />
 
-                {/* Fluffiness */}
-                <div className="space-y-3">
-                  <Label htmlFor="fluffiness" className="text-base">
-                    Fluffiness: {fluffiness[0]}%
-                  </Label>
-                  <Slider
-                    id="fluffiness"
-                    value={fluffiness}
-                    onValueChange={setFluffiness}
-                    max={100}
-                    step={1}
-                    className="w-full"
-                  />
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-3 pt-4">
-                  <Button className="flex-1">Generate Cat</Button>
-                  <Button variant="outline" className="flex-1 bg-transparent">
-                    Reset
-                  </Button>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="p-6 bg-muted/50">
-              <h3 className="font-semibold mb-2">Pro Tip</h3>
-              <p className="text-sm text-muted-foreground">
-                Pallas's cats are known for their thick, fluffy fur and
-                expressive faces. Try different combinations to create your
-                perfect manul!
-              </p>
+              <div></div>
             </Card>
           </div>
         </div>
@@ -108,3 +126,19 @@ export function CatCreator() {
   );
 }
 
+const Option = ({
+  filename,
+  dest,
+  setComp,
+}: {
+  filename: string;
+  dest: string;
+  setComp: (value: string) => void;
+}) => {
+  const relPath = `/create-cat/${dest}/${filename}` 
+  return (
+    <div onClick={() => setComp(relPath)}>
+      <img src={relPath} />
+    </div>
+  );
+};
