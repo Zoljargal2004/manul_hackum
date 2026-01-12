@@ -1,5 +1,5 @@
 import { Navigation } from "@/components/navigation"
-import { CatCreator } from "@/components/cat-creator"
+import { CatCreator } from "@/components/cat-creator/cat-creator"
 
 export const metadata = {
   title: "Create Your Pallas's Cat - Interactive Cat Creator",
@@ -10,6 +10,9 @@ export default function CreatorPage() {
   return (
     <div className="min-h-screen">
       <Navigation />
+      <div className="text-4xl mt-20 text-center">
+        Персона үүсгэх
+      </div>
       <CatCreator />
     </div>
   )
