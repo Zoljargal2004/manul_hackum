@@ -19,6 +19,7 @@ export async function composeCanvas(
 
   const catNode = nodes.find((n) => n.id === "cat");
   if (!catNode) return;
+  console.log("wtfffff")
 
   const { width, height } = catNode.scale;
 

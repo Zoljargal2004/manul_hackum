@@ -26,12 +26,18 @@ export const randomize = (
   setLayers(next);
 };
 
-export const searchNode = (nodes: Node[], search: string) => {
-  console.log("seachgin nodes", nodes.flat(), search)
-  return nodes.flat().find((node) => node.id == search);
-};
+export function searchNode(nodes: Node[], search: string | null): Node | null {
+  for (const node of nodes) {
+    if (node.id === search) return node;
 
+    if (node.children?.length) {
+      const found = searchNode(node.children, search);
+      if (found) return found;
+    }
+  }
 
+  return null;
+}
 
 export const getAllNodes = (nodes: Node[]) => {
   const res: string[] = [];

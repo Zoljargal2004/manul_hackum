@@ -15,31 +15,47 @@ import {
 } from "@/components/ui/command";
 import {
   Popover,
-  PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getAllNodes } from "../utils/buildFunctions";
 import { useNodes } from "../nodeProvider";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+
+const PopoverContentNoPortal = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
+>(({ className, align = "start", sideOffset = 4, ...props }, ref) => (
+  <PopoverPrimitive.Content
+    ref={ref}
+    align={align}
+    sideOffset={sideOffset}
+    className={className}
+    {...props}
+  />
+));
+PopoverContentNoPortal.displayName = "PopoverContentNoPortal";
 
 export function SelectParent({
+  value,
   onChange,
 }: {
+  value: string | null;
   onChange: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
-  const { nodes, selected } = useNodes();
+  const { nodes } = useNodes();
 
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<string>("");
+  const [internal, setInternal] = React.useState<string>("");
 
   React.useEffect(() => {
-    setValue(selected ?? "__root__");
-  }, [selected]);
+    setInternal(value ?? "__root__");
+  }, [value]);
 
   const ROOT = "__root__";
 
   const parents = getAllNodes(nodes).map((id) => ({
     label: id,
-    value: id, // always string
+    value: id,
   }));
 
   parents.unshift({ label: "root", value: ROOT });
@@ -47,18 +63,13 @@ export function SelectParent({
   return (
     <Popover open={open} onOpenChange={setOpen} modal={false}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="justify-between"
-        >
-          {parents.find((p) => p.value === value)?.label || "Select parent..."}
-          <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        <Button variant="outline" className="justify-between">
+          {parents.find((p) => p.value === internal)?.label || "Select parent"}
+          <ChevronsUpDownIcon className="ml-2 h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="p-0">
+      <PopoverContentNoPortal className="p-0">
         <Command>
           <CommandInput placeholder="Search parent..." />
           <CommandList>
@@ -68,16 +79,16 @@ export function SelectParent({
                 <CommandItem
                   key={parent.value}
                   value={parent.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue);
+                  onSelect={(v) => {
+                    setInternal(v);
                     setOpen(false);
-                    onChange(currentValue === ROOT ? null : currentValue);
+                    onChange(v === ROOT ? null : v);
                   }}
                 >
                   <CheckIcon
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === parent.value ? "opacity-100" : "opacity-0"
+                      internal === parent.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {parent.label}
@@ -86,7 +97,7 @@ export function SelectParent({
             </CommandGroup>
           </CommandList>
         </Command>
-      </PopoverContent>
+      </PopoverContentNoPortal>
     </Popover>
   );
 }

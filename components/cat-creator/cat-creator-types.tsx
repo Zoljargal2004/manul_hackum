@@ -14,6 +14,11 @@ export type PartConfig = {
   options: readonly string[];
   folder?: string;
 };
+type History<T> = {
+  past: T[];
+  present: T;
+  future: T[];
+};
 
 export type Node = {
   id: string;
@@ -27,9 +32,9 @@ export type Node = {
   };
   rotation: number;
   children?: Node[];
-  parent:string | null
+  parent: string | null;
 
-  src?: HTMLImageElement
+  src?: HTMLImageElement;
 };
 
 export type Layers = Record<PartKey, string | null>;

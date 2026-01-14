@@ -2,14 +2,19 @@ import { useState } from "react";
 import { Foldable } from "./editCat";
 import { useNodes } from "../nodeProvider";
 import { Input } from "@/components/ui/input";
+import { searchNode } from "../utils/buildFunctions";
 
 export const NodePropery = () => {
-  const { nodes, selected, updateNode } = useNodes();
+  const { nodes, selected, updateNode, selectNode } = useNodes();
 
-  const node = nodes.find((n) => n.id === selected);
+  if (!selected) return;
+
+  const node = searchNode(nodes, selected);
 
   if (!node) {
-    return <div className="text-sm text-muted-foreground">Node сонгоогүй байна</div>;
+    return (
+      <div className="text-sm text-muted-foreground">Node сонгоогүй байна</div>
+    );
   }
 
   const { scale, position, rotation, children, id } = node;
@@ -106,7 +111,15 @@ export const NodePropery = () => {
       <Foldable title="Хүүхэд">
         <div className="w-full flex flex-col gap-4">
           {children?.length ? (
-            children.map((c) => <div key={c.id}>{c.id}</div>)
+            children.map((c) => (
+              <div
+                onClick={() => selectNode(c.id)}
+                className="w-full border-[1] p-4 rounded-xl"
+                key={c.id}
+              >
+                {c.id}
+              </div>
+            ))
           ) : (
             <div className="text-center text-muted-foreground">
               Хүүхэд элемент байхгүй

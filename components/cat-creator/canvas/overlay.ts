@@ -1,4 +1,5 @@
 import { Node } from "../cat-creator-types";
+import { searchNode } from "../utils/buildFunctions";
 
 export function drawRetriangle(
   canvas: HTMLCanvasElement,
@@ -13,24 +14,42 @@ export function drawRetriangle(
 
   if (!selected) return;
 
-  const node = nodes.find((n) => n.id === selected);
-  if (!node) return;
+  nodes.forEach((node) => {
+    drawSelectionNode(ctx, node, selected);
+  });
+}
 
-  const { x, y } = node.position;
-  const { width: w, height: h } = node.scale;
-  const deg = node.rotation;
-
+function drawSelectionNode(
+  ctx: CanvasRenderingContext2D,
+  node: Node,
+  selected: string
+) {
   ctx.save();
+
+  ctx.translate(
+    node.position.x + node.scale.width / 2,
+    node.position.y + node.scale.height / 2
+  );
+
+  ctx.rotate((node.rotation * Math.PI) / 180);
+
+  if (node.id === selected) {
+  const w = node.scale.width;
+  const h = node.scale.height;
 
   ctx.lineWidth = 2;
   ctx.strokeStyle = "#3b82f6";
   ctx.setLineDash([6, 4]);
 
-  ctx.translate(x + w / 2, y + h / 2);
-
-  ctx.rotate((deg * Math.PI) / 180);
-
   ctx.strokeRect(-w / 2, -h / 2, w, h);
+  }
+
+  // draw children inside this transform
+  if (node.children) {
+    node.children.forEach((child) => {
+      drawSelectionNode(ctx, child, selected);
+    });
+  }
 
   ctx.restore();
 }

@@ -61,6 +61,10 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
   const [parent, setParent] = useState<string | null>(selected);
 
   useEffect(() => {
+    setParent(selected);
+  }, [selected]);
+
+  useEffect(() => {
     if (!file) {
       setPreviewUrl(null);
       return;
@@ -92,15 +96,13 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
       scale,
       rotation: 0,
       position: { x: 100, y: 100 },
-      parent
-    }
+      parent,
+    };
 
-  
-    if(parent) {
-      adoptNode(parent, new_node)
-    }
-    else{
-      addNode(new_node)
+    if (parent) {
+      adoptNode(parent, new_node);
+    } else {
+      addNode(new_node);
     }
 
     setId("");
@@ -109,7 +111,7 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
   };
 
   return (
-    <DialogContent>
+    <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
       <DialogHeader>
         <DialogTitle>Node үүсгэх</DialogTitle>
         <DialogDescription>Шинэ элемент нэмэх</DialogDescription>
@@ -127,7 +129,7 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
         </div>
         <div className="flex flex-col gap-2">
           <Label>Эцэг элемент</Label>
-          <SelectParent onChange={setParent} />
+          <SelectParent value={parent} onChange={setParent} />
         </div>
 
         {/* Image */}
