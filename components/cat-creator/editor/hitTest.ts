@@ -8,3 +8,7 @@ export function isInsideNode(node: Node, x: number, y: number) {
     y <= node.position.y + node.scale.height
   );
 }
+
+export function findNewSelectedNode(nodes: Node[], x: number, y: number) {
+  return nodes.findLast((node) => isInsideNode(node, x, y));
+}

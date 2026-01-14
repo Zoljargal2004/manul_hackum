@@ -30,7 +30,7 @@ export function Navigation() {
                   <Menu />
                 </Button>
               </SheetTrigger>
-              <SheetContent className="w-full max-w-[400px]">
+              <SheetContent className="w-full ">
                 <SheetHeader>
                   <SheetTitle></SheetTitle>
                   <SheetDescription>
@@ -63,12 +63,12 @@ const NavElements = () => {
       >
         Hackum
       </a>
-      {/* <a
-        href="/#persona"
+      <a
+        href="/creator"
         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         Persona үүсгэх
-      </a> */}
+      </a>
       <a
         href="/#gallery"
         className="text-sm text-muted-foreground hover:text-foreground transition-colors"

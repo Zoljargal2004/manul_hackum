@@ -10,14 +10,17 @@ import {
   PARTS,
 } from "./cat-creator-types";
 import { getMousePos } from "./utils/mouse";
-import { moveTheNode } from "./editor/transform";
-import { isInsideNode } from "./editor/hitTest";
+import { findNewSelectedNode, isInsideNode } from "./editor/hitTest";
 import { composeCanvas } from "./canvas/compositor";
 import { drawRetriangle } from "./canvas/overlay";
 import { createBufferCanvas } from "./canvas/buffer";
 import { EditCat } from "./editor/editCat";
 import { buildInitialLayers } from "./utils/builtinLayer";
 import { downloadPNG, randomize } from "./utils/buildFunctions";
+import { NodeSelector } from "./nodeSelecter";
+import { NodePropery } from "./editor/nodeProperties";
+import { useNodes } from "./nodeProvider";
+import { SelectParent } from "./resusables/selectParent";
 
 export function CatCreator() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -26,16 +29,9 @@ export function CatCreator() {
   const bufferRef = useRef<HTMLCanvasElement | null>(null);
   const overlayRef = useRef<HTMLCanvasElement | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [selectEdit, setSelectEdit] = useState()
+  const { nodes, selected, selectNode, updateNode, addNode, removeNode } =
+    useNodes();
 
-  const [nodes, setNodes] = useState<Node[]>([
-    {
-      id: "cat",
-      position: { x: 100, y: 100 },
-      scale: { width: 700, height: 650 },
-    },
-  ]);
-  const [selected, setSelected] = useState<string | null>("cat");
   const dragOffset = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -45,20 +41,22 @@ export function CatCreator() {
   const menuOrder = useMemo(() => DRAW_ORDER, []);
 
   useEffect(() => {
-    composeCanvas(
-      canvasRef.current!,
-      bufferRef.current!,
-      layers,
-      stroke,
-      nodes[0].scale,
-      nodes[0].position
-    );
-  }, [layers, stroke, nodes]);
+    if (!dragging)
+      composeCanvas(
+        canvasRef.current!,
+        bufferRef.current!,
+        layers,
+        // stroke,
+        nodes
+      );
+  }, [layers, stroke, nodes, dragging]);
 
   useEffect(() => {
     if (!overlayRef.current) return;
     drawRetriangle(overlayRef.current, nodes, selected);
   }, [nodes, selected]);
+
+  const selectedNode = nodes.find((node) => node.id === selected);
 
   const setLayer = (key: PartKey, value: string | null) =>
     setLayers((p) => ({ ...p, [key]: value }));
@@ -96,32 +94,32 @@ export function CatCreator() {
                   if (!canvasRef.current) return;
 
                   const pos = getMousePos(e, canvasRef.current);
-                  const node = nodes[0]; // you only have one right now
 
-                  if (isInsideNode(node, pos.x, pos.y)) {
-                    setSelected(node.id);
-                    setDragging(true);
+                  let node = findNewSelectedNode(nodes, pos.x, pos.y);
 
-                    dragOffset.current = {
-                      x: pos.x - node.position.x,
-                      y: pos.y - node.position.y,
-                    };
-                  }
+                  if (!node) return;
+
+                  selectNode(node.id);
+
+                  setDragging(true);
+
+                  dragOffset.current = {
+                    x: pos.x - node.position.x,
+                    y: pos.y - node.position.y,
+                  };
                 }}
                 onMouseMove={(e) => {
-                  if (!canvasRef.current) return;
-                  if (!dragging || !selected) return;
+                  if (!canvasRef.current || !dragging || !selected) return;
 
                   const pos = getMousePos(e, canvasRef.current);
 
-                  setNodes((prev) =>
-                    moveTheNode(
-                      selected,
-                      prev,
-                      pos.x - dragOffset.current.x,
-                      pos.y - dragOffset.current.y
-                    )
-                  );
+                  updateNode(selected, (n) => ({
+                    ...n,
+                    position: {
+                      x: pos.x - dragOffset.current.x,
+                      y: pos.y - dragOffset.current.y,
+                    },
+                  }));
                 }}
                 onMouseUp={() => setDragging(false)}
                 onMouseLeave={() => setDragging(false)}
@@ -134,16 +132,22 @@ export function CatCreator() {
                 className="w-full absolute top-0 left-0 pointer-events-none"
               />
             </div>
-            <div>
-              <div className="space-y-4">
-                <EditCat
-                  stroke={stroke}
-                  setStroke={setStroke}
-                  menuOrder={menuOrder}
-                  layers={layers}
-                  setLayer={setLayer}
-                />
-              </div>
+            <div className="flex flex-col gap-4">
+              <NodeSelector />
+              {selected && selectedNode && (
+                <div className="space-y-4">
+                  <NodePropery key={"FML"} />
+                  {selected == "cat" && (
+                    <EditCat
+                      stroke={stroke}
+                      setStroke={setStroke}
+                      menuOrder={menuOrder}
+                      layers={layers}
+                      setLayer={setLayer}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

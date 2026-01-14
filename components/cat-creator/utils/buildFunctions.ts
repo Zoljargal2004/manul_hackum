@@ -1,6 +1,7 @@
 import { RefObject } from "react";
-import { DRAW_ORDER, Layers, PartKey, PARTS } from "../cat-creator-types";
+import { DRAW_ORDER, Layers, Node, PartKey, PARTS } from "../cat-creator-types";
 import { buildPath } from "./path";
+import { useNodes } from "../nodeProvider";
 
 export const downloadPNG = (canvasRef: RefObject<HTMLCanvasElement | null>) => {
   const canvas = canvasRef.current;
@@ -23,4 +24,19 @@ export const randomize = (
   });
 
   setLayers(next);
+};
+
+export const searchNode = (nodes: Node[], search: string) => {
+  console.log("seachgin nodes", nodes.flat(), search)
+  return nodes.flat().find((node) => node.id == search);
+};
+
+
+
+export const getAllNodes = (nodes: Node[]) => {
+  const res: string[] = [];
+  nodes.flat().forEach((node) => {
+    res.push(node.id);
+  });
+  return res;
 };

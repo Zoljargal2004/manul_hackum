@@ -25,6 +25,11 @@ export type Node = {
     width: number;
     height: number;
   };
+  rotation: number;
+  children?: Node[];
+  parent:string | null
+
+  src?: HTMLImageElement
 };
 
 export type Layers = Record<PartKey, string | null>;
@@ -51,7 +56,7 @@ export const PARTS: Record<PartKey, PartConfig> = {
   mouth: {
     label: "Mouth",
     position: [0.5803, 0.256, 0.0821, 0.1253],
-    options: ["1.svg", "2.svg", "3.svg"],
+    options: ["1.svg"],
   },
   fang: {
     label: "Fang",
@@ -61,28 +66,28 @@ export const PARTS: Record<PartKey, PartConfig> = {
   nose: {
     label: "Nose",
     position: [0.5336, 0.2383, 0.1598, 0.1024],
-    options: ["1.svg", "2.svg", "3.svg"],
+    options: ["1.svg"],
   },
   naruto_beard: {
     label: "Naruto Beard",
     position: [0.3068, 0.1942, 0.5872, 0.2233],
-    options: ["1.svg", "2.svg"],
+    options: ["1.svg"],
     folder: "naruto-beard",
   },
   beard: {
     label: "Beard",
     position: [0.2322, 0.1589, 0.7169, 0.2504],
-    options: ["1.svg", "2.svg", "3.svg"],
+    options: ["1.svg"],
   },
   eye: {
     label: "Eyes",
     position: [0.4161, 0.1086, 0.3594, 0.1977],
-    options: ["1.svg", "2.svg", "3.svg"],
+    options: ["1.svg"],
   },
   stain: {
     label: "Stain",
     position: [0.5389, 0.0856, 0.0754, 0.0671],
-    options: ["1.svg", "2.svg", "3.svg"],
+    options: ["1.svg"],
   },
 };
 

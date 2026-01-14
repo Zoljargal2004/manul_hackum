@@ -55,7 +55,7 @@ export function Habitat() {
               </div>
             </div>
 
-            <div className="relative h-[500px] rounded-lg overflow-hidden">
+            <div className="relative rounded-lg overflow-hidden">
               <img
                 src="/manul.jpg"
                 alt="nutag"
