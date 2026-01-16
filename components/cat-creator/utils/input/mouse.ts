@@ -33,7 +33,6 @@ export const mouseDown = (
   
   if (selected) {
     const handle = getResizeHandle(nodes, pos.x, pos.y, selected);
-    console.log("handle" , handle)
     if (handle) {
       const node = nodes.find(n => n.id === selected);
       if (node) {
@@ -93,8 +92,8 @@ export const mouseMove = (
     
     // Calculate new dimensions based on handle
     switch (resizeHandle.current) {
-      case "sw": // Bottom-left
-        newWidth = resizeStart.current.width - deltaX;
+      case "se": // Bottom-left
+        newWidth = resizeStart.current.width + deltaX;
         newHeight = resizeStart.current.height + deltaY;
         break;
     }

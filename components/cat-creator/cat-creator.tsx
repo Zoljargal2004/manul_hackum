@@ -133,7 +133,7 @@ export function CatCreator() {
                         NonNullable<ResizeHandle>,
                         string
                       > = {
-                        sw: "sw-resize",
+                        se: "se-resize",
                       };
                       canvasRef.current.style.cursor =
                         cursors[handle] || "default";

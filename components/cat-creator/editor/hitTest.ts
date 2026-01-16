@@ -55,7 +55,7 @@ export function findNewSelectedNode(
 }
 
 export type ResizeHandle =
-  | "sw" // bottom-left
+  | "se"
   | null;
 
 const HANDLE_SIZE = 8;
@@ -92,16 +92,17 @@ export function getResizeHandle(
       const h = node.scale.height;
       const margin = HANDLE_SIZE / 2 + 4;
 
-      console.log(lx , w / 2, margin)
+      // console.log(lx, -w / 2, margin);
+      // console.log(lx, w / 2, margin);
 
 
       if (
-        lx >= -w / 2 - margin &&
-        lx <= -w / 2 + margin &&
+        lx >= w / 2 - margin &&
+        lx <= w / 2 + margin &&
         ly >= h / 2 - margin &&
         ly <= h / 2 + margin
       ) {
-        return "sw";
+        return "se";
       }
     }
   }
