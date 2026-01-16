@@ -5,10 +5,10 @@ import { Layers, PartKey, PARTS } from "../cat-creator-types";
 import { Option } from "./optionEditor";
 import { useState } from "react";
 import { MoveDown, MoveLeft, MoveRight } from "lucide-react";
+import { useNodes } from "../nodeProvider";
+import { searchNode } from "../utils/node/search";
 
 type EditCatProps = {
-  stroke: number;
-  setStroke: (v: number) => void;
   menuOrder: readonly PartKey[];
   layers: Layers;
   setLayer: (key: PartKey, value: string | null) => void;
@@ -59,12 +59,14 @@ export const Foldable = ({
 };
 
 export const EditCat = ({
-  stroke,
-  setStroke,
   menuOrder,
   layers,
   setLayer,
 }: EditCatProps) => {
+  const { nodes, updateNode } = useNodes();
+  const catNode = searchNode(nodes, "cat");
+  const stroke = catNode?.stroke ?? 0;
+
   return (
     <>
       <Card className="p-4 space-y-3">
@@ -79,8 +81,14 @@ export const EditCat = ({
             className={cn("w-[60%]")}
             value={[stroke]}
             max={25}
+            min={0}
             step={1}
-            onValueChange={(value) => setStroke(value[0])}
+            onValueChange={(value) =>
+              updateNode("cat", (n) => ({
+                ...n,
+                stroke: value[0],
+              }))
+            }
           />
           <span>{stroke}px</span>
         </div>

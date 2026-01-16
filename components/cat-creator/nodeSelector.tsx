@@ -15,29 +15,23 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Link, Lock } from "lucide-react";
 import { useNodes } from "./nodeProvider";
-import { SelectParent } from "./resusables/selectParent";
+import {
+  IDInput,
+  ImageInput,
+  NodeNav,
+  NodeOrderEditor,
+  SelectParent,
+} from "./reusables/property-menu-items";
 import { Node } from "./cat-creator-types";
+import { searchNode } from "./utils/node/search";
 
 export const NodeSelector = () => {
-  const { nodes, selected, selectNode } = useNodes();
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div className="flex gap-2 flex-wrap">
-        {nodes.map((node) => (
-          <button
-            key={node.id}
-            onClick={() => selectNode(node.id)}
-            className={cn(
-              "rounded-xl border px-4 py-1 text-sm hover:bg-slate-800 transition",
-              selected === node.id && "bg-slate-900"
-            )}
-          >
-            {node.id}
-          </button>
-        ))}
-
+        <NodeNav />
         <DialogTrigger className="rounded-xl border px-3 hover:bg-slate-800">
           +
         </DialogTrigger>
@@ -54,8 +48,10 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
   const [id, setId] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [nodeType, setNodeType] = useState<"image" | "text">("image");
+  const [text, setText] = useState("");
 
-  const [scale, setScale] = useState({ width: 0, height: 0 });
+  const [scale, setScale] = useState({ width: 200, height: 50 });
   const [imageRatio, setImageRatio] = useState(1);
 
   const [parent, setParent] = useState<string | null>(selected);
@@ -84,29 +80,57 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
   }, [file]);
 
   const handleAddNode = async () => {
-    if (!id.trim() || !file) return;
+    if (!id.trim()) return;
+    
+    if (nodeType === "image") {
+      if (!file) return;
 
-    const img = new Image();
-    img.src = previewUrl!;
-    await img.decode();
+      const img = new Image();
+      img.src = previewUrl!;
+      await img.decode();
 
-    const new_node: Node = {
-      id,
-      src: img,
-      scale,
-      rotation: 0,
-      position: { x: 100, y: 100 },
-      parent,
-    };
+      const new_node: Node = {
+        id,
+        src: img,
+        scale,
+        rotation: 0,
+        position: { x: 100, y: 100 },
+        parent,
+        stroke: 0,
+      };
 
-    if (parent) {
-      adoptNode(parent, new_node);
+      if (parent) {
+        adoptNode(parent, new_node);
+      } else {
+        addNode(new_node);
+      }
     } else {
-      addNode(new_node);
+      // Text node
+      const new_node: Node = {
+        id,
+        text: text || "Text",
+        scale,
+        rotation: 0,
+        position: { x: 100, y: 100 },
+        parent,
+        stroke: 0,
+        textColor: "#000000",
+        fontFamily: "Arial",
+        fontWeight: "normal",
+        textAlign: "center",
+      };
+
+      if (parent) {
+        adoptNode(parent, new_node);
+      } else {
+        addNode(new_node);
+      }
     }
 
     setId("");
     setFile(null);
+    setText("");
+    setScale({ width: 200, height: 50 });
     onDone();
   };
 
@@ -119,58 +143,72 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
 
       <div className="flex flex-col gap-4">
         {/* ID */}
-        <div className="flex flex-col gap-2">
-          <Label>ID</Label>
-          <Input
-            placeholder="id"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-          />
+        <IDInput id={id} setId={setId} />
+
+        {/* parent */}
+        <SelectParent value={parent} onChange={setParent} />
+
+        {/* Node Type */}
+        <div className="space-y-2">
+          <Label className="font-semibold text-sm">Төрөл</Label>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant={nodeType === "image" ? "default" : "outline"}
+              onClick={() => setNodeType("image")}
+              className="flex-1"
+            >
+              Зураг
+            </Button>
+            <Button
+              type="button"
+              variant={nodeType === "text" ? "default" : "outline"}
+              onClick={() => setNodeType("text")}
+              className="flex-1"
+            >
+              Текст
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label>Эцэг элемент</Label>
-          <SelectParent value={parent} onChange={setParent} />
-        </div>
 
-        {/* Image */}
-        <div className="flex flex-col gap-2">
-          <Label>Зураг</Label>
-
-          <input
-            id="new_node_img"
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) setFile(f);
-            }}
-          />
-
-          <label
-            htmlFor="new_node_img"
-            className="w-full min-h-24 border rounded-xl flex items-center justify-center cursor-pointer overflow-hidden"
-          >
-            {!previewUrl ? (
-              <span className="text-2xl text-muted-foreground">+</span>
-            ) : (
-              <img
-                src={previewUrl}
-                alt="preview"
-                className="max-h-40 object-contain"
+        {/* image or text */}
+        {nodeType === "image" ? (
+          <>
+            <ImageInput previewUrl={previewUrl} setFile={setFile} />
+            <ImageSizeControl
+              scale={scale}
+              setScale={setScale}
+              ratio={imageRatio}
+            />
+          </>
+        ) : (
+          <>
+            <div className="space-y-2">
+              <Label className="font-semibold text-sm">Текст</Label>
+              <Input
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Текст оруулах..."
               />
-            )}
-          </label>
-        </div>
+            </div>
+            <ImageSizeControl
+              scale={scale}
+              setScale={setScale}
+              ratio={1}
+            />
+          </>
+        )}
 
-        {/* Size */}
-        <ImageSizeControl
-          scale={scale}
-          setScale={setScale}
-          ratio={imageRatio}
-        />
-
-        <Button onClick={handleAddNode}>Нэмэх</Button>
+        <Button
+          disabled={
+            !id || id === "cat" || id === "root" || searchNode(nodes, id)
+              ? true
+              : false
+          }
+          onClick={handleAddNode}
+        >
+          Нэмэх
+        </Button>
       </div>
     </DialogContent>
   );
@@ -254,3 +292,4 @@ const ImageSizeControl = ({
     </div>
   );
 };
+

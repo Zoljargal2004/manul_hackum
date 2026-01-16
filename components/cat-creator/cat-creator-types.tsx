@@ -14,11 +14,6 @@ export type PartConfig = {
   options: readonly string[];
   folder?: string;
 };
-type History<T> = {
-  past: T[];
-  present: T;
-  future: T[];
-};
 
 export type Node = {
   id: string;
@@ -33,6 +28,12 @@ export type Node = {
   rotation: number;
   children?: Node[];
   parent: string | null;
+  text?: string;
+  stroke?: number;
+  textColor?: string;
+  fontFamily?: string;
+  fontWeight?: string;
+  textAlign?: "left" | "center" | "right";
 
   src?: HTMLImageElement;
 };

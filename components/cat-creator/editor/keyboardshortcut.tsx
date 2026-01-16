@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useNodes } from "../nodeProvider";
-import { composeCanvas } from "../canvas/compositor";
+import { composeCanvas } from "../utils/canvas/compositor";
 
 export function KeyboardShortcuts() {
   const { selected, removeNode, undo, redo } = useNodes();
@@ -15,7 +15,6 @@ export function KeyboardShortcuts() {
         removeNode(selected);
       }
 
-      // Redo: Ctrl/Cmd + Shift + Z
       else if (
         (e.ctrlKey || e.metaKey) &&
         e.shiftKey &&
@@ -25,7 +24,6 @@ export function KeyboardShortcuts() {
         redo();
       }
 
-      // Undo: Ctrl/Cmd + Z
       else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
         e.preventDefault();
         undo();
@@ -36,5 +34,5 @@ export function KeyboardShortcuts() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [selected, removeNode]);
 
-  return null; // invisible logic-only component
+  return null; 
 }

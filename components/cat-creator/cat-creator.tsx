@@ -9,23 +9,30 @@ import {
   PartKey,
   PARTS,
 } from "./cat-creator-types";
-import { getMousePos } from "./utils/mouse";
+import {
+  getMousePos,
+  mouseDown,
+  mouseMove,
+  mouseUp,
+} from "./utils/input/mouse";
+import { ResizeHandle, getResizeHandle } from "./editor/hitTest";
 import { findNewSelectedNode, isInsideNode } from "./editor/hitTest";
-import { composeCanvas } from "./canvas/compositor";
-import { drawRetriangle } from "./canvas/overlay";
-import { createBufferCanvas } from "./canvas/buffer";
+import { composeCanvas } from "./utils/canvas/compositor";
+import { drawRetriangle } from "./utils/canvas/overlay";
+import { createBufferCanvas } from "./utils/canvas/buffer";
 import { EditCat } from "./editor/editCat";
-import { buildInitialLayers } from "./utils/builtinLayer";
-import { downloadPNG, randomize, searchNode } from "./utils/buildFunctions";
-import { NodeSelector } from "./nodeSelecter";
-import { NodePropery } from "./editor/nodeProperties";
+import { buildInitialLayers } from "./utils/layer/initial";
+import { downloadPNG } from "./utils/file/download";
+import { randomize } from "./utils/layer/randomize";
+import { searchNode } from "./utils/node/search";
+import { NodeSelector } from "./nodeSelector";
+import { NodeProperty } from "./editor/nodeProperties";
 import { useNodes } from "./nodeProvider";
-import { SelectParent } from "./resusables/selectParent";
+import { SelectParent } from "./reusables/property-menu-items";
 
 export function CatCreator() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [layers, setLayers] = useState<Layers>(buildInitialLayers);
-  const [stroke, setStroke] = useState<number>(0);
   const bufferRef = useRef<HTMLCanvasElement | null>(null);
   const overlayRef = useRef<HTMLCanvasElement | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -41,6 +48,13 @@ export function CatCreator() {
   const dragStartNodes = useRef<Node[] | null>(null);
 
   const dragOffset = useRef({ x: 0, y: 0 });
+  const resizeHandle = useRef<ResizeHandle>(null);
+  const resizeStart = useRef<{
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  } | null>(null);
 
   useEffect(() => {
     bufferRef.current = createBufferCanvas(1400, 1300);
@@ -50,14 +64,8 @@ export function CatCreator() {
 
   useEffect(() => {
     if (!dragging)
-      composeCanvas(
-        canvasRef.current!,
-        bufferRef.current!,
-        layers,
-        // stroke,
-        nodes
-      );
-  }, [layers, stroke, nodes, dragging]);
+      composeCanvas(canvasRef.current!, bufferRef.current!, layers, nodes);
+  }, [layers, nodes, dragging]);
 
   useEffect(() => {
     if (!overlayRef.current) return;
@@ -96,56 +104,66 @@ export function CatCreator() {
                 width={1400}
                 height={1300}
                 className="w-full border rounded block"
-                onKeyDown={(e) => {
-                  if (e.key == "Delete") {
-                    if (selected) removeNode(selected);
-                  }
-                }}
-                onMouseDown={(e) => {
-                  if (!canvasRef.current) return;
-
-                  const pos = getMousePos(e, canvasRef.current);
-                  let node = findNewSelectedNode(nodes, pos.x, pos.y);
-                  if (!node) return;
-
-                  selectNode(node.id);
-                  setDragging(true);
-
-                  dragStartNodes.current = nodes; // snapshot
-
-                  dragOffset.current = {
-                    x: pos.x - node.position.x,
-                    y: pos.y - node.position.y,
-                  };
-                }}
+                onMouseDown={(e) =>
+                  mouseDown(
+                    e,
+                    canvasRef,
+                    selectNode,
+                    dragOffset,
+                    nodes,
+                    setDragging,
+                    dragStartNodes,
+                    selected,
+                    resizeHandle,
+                    resizeStart
+                  )
+                }
                 onMouseMove={(e) => {
-                  if (!canvasRef.current || !dragging || !selected) return;
+                  // Update cursor style based on hover
+                  if (!dragging && selected && canvasRef.current) {
+                    const pos = getMousePos(e, canvasRef.current);
+                    const handle = getResizeHandle(
+                      nodes,
+                      pos.x,
+                      pos.y,
+                      selected
+                    );
+                    if (handle) {
+                      const cursors: Record<
+                        NonNullable<ResizeHandle>,
+                        string
+                      > = {
+                        sw: "sw-resize",
+                      };
+                      canvasRef.current.style.cursor =
+                        cursors[handle] || "default";
+                    } else {
+                      canvasRef.current.style.cursor = "move";
+                    }
+                  } else if (!dragging && canvasRef.current) {
+                    canvasRef.current.style.cursor = "default";
+                  }
 
-                  const pos = getMousePos(e, canvasRef.current);
-
-                  updateNodeRaw(selected, (n) => ({
-                    ...n,
-                    position: {
-                      x: pos.x - dragOffset.current.x,
-                      y: pos.y - dragOffset.current.y,
-                    },
-                  }));
+                  mouseMove(
+                    e,
+                    canvasRef,
+                    dragOffset,
+                    dragging,
+                    selected,
+                    updateNodeRaw,
+                    resizeHandle,
+                    resizeStart
+                  );
                 }}
                 onMouseUp={() => {
-                  if (dragging && dragStartNodes.current) {
-                    updateNode(selected!, (n) => n); // forces commit of final state
-                  }
-
-                  dragStartNodes.current = null;
-                  setDragging(false);
-                }}
-                onMouseLeave={() => setDragging(false)}
-                onDoubleClick={(e) => {
-                  if (!canvasRef.current) return;
-                  const { x, y } = getMousePos(e, canvasRef.current);
-                  let node = findNewSelectedNode(nodes, x, y);
-                  if (!node) return;
-                  selectNode(node?.id);
+                  mouseUp(
+                    setDragging,
+                    dragStartNodes,
+                    dragging,
+                    updateNode,
+                    selected,
+                    resizeHandle
+                  );
                 }}
               />
 
@@ -160,11 +178,9 @@ export function CatCreator() {
               <NodeSelector />
               {selected && (
                 <div className="space-y-4">
-                  <NodePropery key={"FML"} />
+                  <NodeProperty key={"FML"} />
                   {selected == "cat" && (
                     <EditCat
-                      stroke={stroke}
-                      setStroke={setStroke}
                       menuOrder={menuOrder}
                       layers={layers}
                       setLayer={setLayer}

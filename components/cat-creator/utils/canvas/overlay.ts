@@ -1,5 +1,5 @@
-import { Node } from "../cat-creator-types";
-import { searchNode } from "../utils/buildFunctions";
+import { Node } from "../../cat-creator-types";
+import { searchNode } from "../node/search";
 
 export function drawRetriangle(
   canvas: HTMLCanvasElement,
@@ -34,14 +34,36 @@ function drawSelectionNode(
   ctx.rotate((node.rotation * Math.PI) / 180);
 
   if (node.id === selected) {
-  const w = node.scale.width;
-  const h = node.scale.height;
+    const w = node.scale.width;
+    const h = node.scale.height;
+    const handleSize = 8;
 
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "#3b82f6";
-  ctx.setLineDash([6, 4]);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#3b82f6";
+    ctx.setLineDash([6, 4]);
 
-  ctx.strokeRect(-w / 2, -h / 2, w, h);
+    ctx.strokeRect(-w / 2, -h / 2, w, h);
+
+    // Draw resize handles (corners)
+    ctx.fillStyle = "#3b82f6";
+    ctx.setLineDash([]);
+    
+    // Corner handles
+    const corners = [
+      { x: -w / 2, y: -h / 2 }, // Top-left
+      { x: w / 2, y: -h / 2 },  // Top-right
+      { x: w / 2, y: h / 2 },   // Bottom-right
+      { x: -w / 2, y: h / 2 },  // Bottom-left
+    ];
+
+    corners.forEach((corner) => {
+      ctx.fillRect(
+        corner.x - handleSize / 2,
+        corner.y - handleSize / 2,
+        handleSize,
+        handleSize
+      );
+    });
   }
 
   // draw children inside this transform
@@ -53,3 +75,4 @@ function drawSelectionNode(
 
   ctx.restore();
 }
+

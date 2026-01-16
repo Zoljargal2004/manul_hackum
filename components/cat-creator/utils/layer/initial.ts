@@ -1,4 +1,4 @@
-import { DRAW_ORDER, Layers, PARTS } from "../cat-creator-types";
+import { DRAW_ORDER, Layers, PARTS } from "../../cat-creator-types";
 import { buildPath } from "./path";
 
 export const buildInitialLayers = (): Layers => {
@@ -6,3 +6,4 @@ export const buildInitialLayers = (): Layers => {
   DRAW_ORDER.forEach((k) => (out[k] = buildPath(k, PARTS[k].options[0])));
   return out;
 };
+

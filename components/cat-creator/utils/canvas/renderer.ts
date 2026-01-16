@@ -1,4 +1,4 @@
-import { BASE_SRC, DRAW_ORDER, Layers, PARTS } from "../cat-creator-types";
+import { BASE_SRC, DRAW_ORDER, Layers, PARTS } from "../../cat-creator-types";
 
 export function drawImage(
   ctx: CanvasRenderingContext2D,
@@ -26,7 +26,8 @@ export async function renderCat(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  layers: Layers
+  layers: Layers,
+  stroke: number = 0
 ) {
   ctx.clearRect(0, 0, width, height);
   await drawImage(ctx, BASE_SRC, 0, 0, width, height);
@@ -44,4 +45,14 @@ export async function renderCat(
 
     await drawImage(ctx, src, x, y, w, h);
   }
+
+  // Apply stroke around the cat if stroke width > 0
+  if (stroke > 0) {
+    ctx.save();
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = stroke;
+    ctx.strokeRect(stroke / 2, stroke / 2, width - stroke, height - stroke);
+    ctx.restore();
+  }
 }
+

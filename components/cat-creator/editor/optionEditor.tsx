@@ -1,5 +1,5 @@
 import { Layers, PartKey } from "../cat-creator-types";
-import { buildPath } from "../utils/path";
+import { buildPath } from "../utils/layer/path";
 
 type OptionProps = {
   layers: Layers;
