@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { searchNode } from "../utils/node/search";
 import { NodeOrderEditor } from "../reusables/property-menu-items";
-import { AlignLeft, AlignCenter, AlignRight, Bold, ChevronsUpDownIcon, CheckIcon } from "lucide-react";
+import {
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Bold,
+  ChevronsUpDownIcon,
+  CheckIcon,
+} from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -16,7 +23,11 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 
 export const NodeProperty = () => {
   const { nodes, selected, updateNode, selectNode } = useNodes();
@@ -33,6 +44,7 @@ export const NodeProperty = () => {
 
   const { scale, position, rotation, children, id, stroke } = node;
   const [newId, setNewId] = useState<string>(id);
+  console.log(node)
 
   return (
     <div className="flex flex-col gap-4">
@@ -129,6 +141,16 @@ export const NodeProperty = () => {
               </Button>
             </div>
           </Foldable>
+          <Foldable title="Font Size">
+            <div className="flex gap-2">
+              <Input type="number" value={node.fontSize || 40} onChange={(e)=> {
+                updateNode(id, (n) => ({
+                    ...n,
+                    fontSize: Number(e.target.value),
+                  }));
+              }}/>
+            </div>
+          </Foldable>
 
           <Foldable title="Text Alignment">
             <div className="flex gap-2">
@@ -147,7 +169,11 @@ export const NodeProperty = () => {
               </Button>
               <Button
                 type="button"
-                variant={node.textAlign === "center" || !node.textAlign ? "default" : "outline"}
+                variant={
+                  node.textAlign === "center" || !node.textAlign
+                    ? "default"
+                    : "outline"
+                }
                 onClick={() => {
                   updateNode(id, (n) => ({
                     ...n,

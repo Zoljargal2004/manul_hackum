@@ -85,10 +85,10 @@ function drawNodeTree(
     ctx.save();
     
     // Apply text styling
-    const textColor = node.textColor || "#000000";
+    const textColor = node.textColor || "#FFF";
     const fontFamily = node.fontFamily || "Arial";
     const fontWeight = node.fontWeight || "normal";
-    const fontSize = node.scale.height;
+    const fontSize = node.fontSize || 12;
     const textAlign = node.textAlign || "center";
     
     ctx.fillStyle = textColor;

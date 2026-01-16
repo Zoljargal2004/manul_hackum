@@ -31,6 +31,7 @@ export type Node = {
   text?: string;
   stroke?: number;
   textColor?: string;
+  fontSize? : number;
   fontFamily?: string;
   fontWeight?: string;
   textAlign?: "left" | "center" | "right";
