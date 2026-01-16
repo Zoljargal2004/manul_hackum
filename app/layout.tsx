@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     icon: {
       url: "/hackum-symbol.png",
     },
-    apple: "/hackum-symboл.png",
+    apple: "/hackum-symbol.png",
   },
 };
 
