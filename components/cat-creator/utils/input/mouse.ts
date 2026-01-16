@@ -2,6 +2,7 @@ import { RefObject } from "react";
 import { findNewSelectedNode, getResizeHandle } from "../../editor/hitTest";
 import { ResizeHandle } from "../../editor/hitTest";
 import { Node } from "../../cat-creator-types";
+import { searchNode } from "../node/search";
 
 export function getMousePos(
   e: React.MouseEvent<HTMLCanvasElement>,
@@ -39,7 +40,7 @@ export const mouseDown = (
   if (selected) {
     const handle = getResizeHandle(nodes, pos.x, pos.y, selected);
     if (handle) {
-      const node = nodes.find((n) => n.id === selected);
+      const node = searchNode(nodes, selected);
       if (node) {
         resizeHandle.current = handle;
         resizeStart.current = {

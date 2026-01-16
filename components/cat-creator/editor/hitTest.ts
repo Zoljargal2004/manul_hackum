@@ -1,4 +1,5 @@
 import { Node } from "../cat-creator-types";
+import { getAllNodes, getAllNodesNames } from "../utils/node/search";
 
 export function isInsideNode(
   node: Node,
@@ -64,8 +65,9 @@ export function getResizeHandle(
   y: number,
   selectedId: string
 ): ResizeHandle {
-  for (let i = nodes.length - 1; i >= 0; i--) {
-    const node = nodes[i];
+  const allnodes=  getAllNodes(nodes)
+  for (let i = allnodes.length - 1; i >= 0; i--) {
+    const node = allnodes[i];
 
     let lx = x - (node.position.x + node.scale.width / 2);
     let ly = y - (node.position.y + node.scale.height / 2);

@@ -55,6 +55,7 @@ function drawSelectionNode(
       { x: w / 2, y: h / 2 },   // Bottom-right
     ];
 
+
     corners.forEach((corner) => {
       ctx.fillRect(
         corner.x - handleSize / 2,

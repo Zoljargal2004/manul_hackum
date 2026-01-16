@@ -13,11 +13,25 @@ export function searchNode(nodes: Node[], search: string | null): Node | null {
   return null;
 }
 
-export const getAllNodes = (nodes: Node[]) => {
+export const getAllNodesNames = (nodes: Node[]) => {
   const allnodes: string[] = [];
 
   for (const node of nodes) {
     if (node.id) allnodes.push(node.id);
+
+    if (node.children?.length) {
+      const children = getAllNodesNames(node.children);
+      allnodes.push(...children);
+    }
+  }
+
+  return allnodes;
+};
+export const getAllNodes = (nodes: Node[]) => {
+  const allnodes: Node[] = [];
+
+  for (const node of nodes) {
+    if (node.id) allnodes.push(node);
 
     if (node.children?.length) {
       const children = getAllNodes(node.children);

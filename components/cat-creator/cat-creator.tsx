@@ -119,7 +119,7 @@ export function CatCreator() {
                   )
                 }
                 onMouseMove={(e) => {
-                  // Update cursor style based on hover
+                  // console.log(dragging, selected, canvasRef.current)
                   if (!dragging && selected && canvasRef.current) {
                     const pos = getMousePos(e, canvasRef.current);
                     const handle = getResizeHandle(

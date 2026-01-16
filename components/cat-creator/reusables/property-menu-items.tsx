@@ -14,7 +14,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
-import { getAllNodes } from "../utils/node/search";
+import { getAllNodesNames } from "../utils/node/search";
 import { useNodes } from "../nodeProvider";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Label } from "@radix-ui/react-label";
@@ -52,7 +52,7 @@ export function SelectParent({
 
   const ROOT = "__root__";
 
-  const parents = getAllNodes(nodes).map((id) => ({
+  const parents = getAllNodesNames(nodes).map((id) => ({
     label: id,
     value: id,
   }));
@@ -108,7 +108,7 @@ export const NodeNav = () => {
   const { nodes } = useNodes();
   return (
     <div>
-      {getAllNodes(nodes).map((node) => (
+      {getAllNodesNames(nodes).map((node) => (
         <NodeButon key={node} node={node} />
       ))}
     </div>
