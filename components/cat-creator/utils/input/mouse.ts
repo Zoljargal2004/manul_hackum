@@ -25,16 +25,21 @@ export const mouseDown = (
   dragStartNodes: RefObject<Node[] | null>,
   selected: string | null,
   resizeHandle: RefObject<ResizeHandle>,
-  resizeStart: RefObject<{ width: number; height: number; x: number; y: number } | null>
+  resizeStart: RefObject<{
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  } | null>
 ) => {
   if (!canvasRef.current) return;
 
   const pos = getMousePos(e, canvasRef.current);
-  
+
   if (selected) {
     const handle = getResizeHandle(nodes, pos.x, pos.y, selected);
     if (handle) {
-      const node = nodes.find(n => n.id === selected);
+      const node = nodes.find((n) => n.id === selected);
       if (node) {
         resizeHandle.current = handle;
         resizeStart.current = {
@@ -49,7 +54,7 @@ export const mouseDown = (
       }
     }
   }
-  
+
   // Otherwise check for node selection/dragging
   let node = findNewSelectedNode(nodes, pos.x, pos.y);
   if (!node) {
@@ -76,32 +81,40 @@ export const mouseMove = (
   selected: string | null,
   updateNodeRaw: (id: string, updater: (n: Node) => Node) => void,
   resizeHandle: RefObject<ResizeHandle>,
-  resizeStart: RefObject<{ width: number; height: number; x: number; y: number } | null>
+  resizeStart: RefObject<{
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  } | null>
 ) => {
   if (!canvasRef.current || !dragging || !selected) return;
 
   const pos = getMousePos(e, canvasRef.current);
 
-  // Handle resizing
   if (resizeHandle.current && resizeStart.current) {
     const deltaX = pos.x - resizeStart.current.x;
     const deltaY = pos.y - resizeStart.current.y;
-    
+
     let newWidth = resizeStart.current.width;
     let newHeight = resizeStart.current.height;
-    
-    // Calculate new dimensions based on handle
+
     switch (resizeHandle.current) {
-      case "se": // Bottom-left
+      case "s":
+        newHeight = resizeStart.current.height + deltaY;
+        break;
+      case "e":
+        newWidth = resizeStart.current.width + deltaX;
+        break;
+      case "se": // south east bb
         newWidth = resizeStart.current.width + deltaX;
         newHeight = resizeStart.current.height + deltaY;
         break;
     }
-    
-    // Prevent negative sizes
+
     newWidth = Math.max(10, newWidth);
     newHeight = Math.max(10, newHeight);
-    
+
     updateNodeRaw(selected, (n: any) => ({
       ...n,
       scale: {
@@ -138,4 +151,3 @@ export const mouseUp = (
   resizeHandle.current = null;
   setDragging(false);
 };
-

@@ -54,9 +54,7 @@ export function findNewSelectedNode(
   return null;
 }
 
-export type ResizeHandle =
-  | "se"
-  | null;
+export type ResizeHandle = "se" | "s" | "e" | null;
 
 const HANDLE_SIZE = 8;
 
@@ -95,6 +93,22 @@ export function getResizeHandle(
       // console.log(lx, -w / 2, margin);
       // console.log(lx, w / 2, margin);
 
+      if (
+        lx >= -margin &&
+        lx <= +margin &&
+        ly >= h / 2 - margin &&
+        ly <= h / 2 + margin
+      ) {
+        return "s";
+      }
+      if (
+        lx >= w / 2 - margin &&
+        lx <= w / 2 + margin &&
+        ly >= -margin &&
+        ly <= +margin
+      ) {
+        return "e";
+      }
 
       if (
         lx >= w / 2 - margin &&

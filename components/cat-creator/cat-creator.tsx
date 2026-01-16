@@ -134,14 +134,14 @@ export function CatCreator() {
                         string
                       > = {
                         se: "se-resize",
+                        s: "s-resize",
+                        e: "e-resize",
                       };
                       canvasRef.current.style.cursor =
-                        cursors[handle] || "default";
+                        cursors[handle] || "auto";
                     } else {
-                      canvasRef.current.style.cursor = "move";
+                      canvasRef.current.style.cursor = "default";
                     }
-                  } else if (!dragging && canvasRef.current) {
-                    canvasRef.current.style.cursor = "default";
                   }
 
                   mouseMove(

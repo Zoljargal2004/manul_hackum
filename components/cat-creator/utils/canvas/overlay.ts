@@ -50,10 +50,9 @@ function drawSelectionNode(
     
     // Corner handles
     const corners = [
-      { x: -w / 2, y: -h / 2 }, // Top-left
-      { x: w / 2, y: -h / 2 },  // Top-right
+      { x: 0, y: h / 2 }, // Top-left
+      { x: w / 2, y: 0 },  // Top-right
       { x: w / 2, y: h / 2 },   // Bottom-right
-      { x: -w / 2, y: h / 2 },  // Bottom-left
     ];
 
     corners.forEach((corner) => {
