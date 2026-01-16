@@ -33,9 +33,9 @@ const GalleryFrame = ({ img }: { img: string }) => {
           className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
         />
         <Button className="absolute right-4 bottom-4">
-          <Link href={`/gallery/${img}.png`} download>
+          <a href={`/gallery/${img}.png`} download>
             <Download />
-          </Link>
+          </a>
         </Button>
       </div>
     </div>
