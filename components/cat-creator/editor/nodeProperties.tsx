@@ -28,6 +28,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import { Label } from "@radix-ui/react-label";
 
 export const NodeProperty = () => {
   const { nodes, selected, updateNode, selectNode } = useNodes();
@@ -44,7 +45,6 @@ export const NodeProperty = () => {
 
   const { scale, position, rotation, children, id, stroke } = node;
   const [newId, setNewId] = useState<string>(id);
-  console.log(node)
 
   return (
     <div className="flex flex-col gap-4">
@@ -143,12 +143,16 @@ export const NodeProperty = () => {
           </Foldable>
           <Foldable title="Font Size">
             <div className="flex gap-2">
-              <Input type="number" value={node.fontSize || 40} onChange={(e)=> {
-                updateNode(id, (n) => ({
+              <Input
+                type="number"
+                value={node.fontSize || 40}
+                onChange={(e) => {
+                  updateNode(id, (n) => ({
                     ...n,
                     fontSize: Number(e.target.value),
                   }));
-              }}/>
+                }}
+              />
             </div>
           </Foldable>
 
@@ -202,98 +206,85 @@ export const NodeProperty = () => {
         </>
       )}
 
-      <Foldable title="Position">
-        <div className="flex gap-4">
-          <Input
-            type="number"
-            value={position.x}
-            onChange={(e) => {
-              const x = Number(e.target.value);
-              updateNode(id, (n) => ({
-                ...n,
-                position: { ...n.position, x },
-              }));
-            }}
-          />
+      <Foldable title="Transform">
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <Label>Position</Label>
+            <Input
+              type="number"
+              value={position.x}
+              onChange={(e) => {
+                const x = Number(e.target.value);
+                updateNode(id, (n) => ({
+                  ...n,
+                  position: { ...n.position, x },
+                }));
+              }}
+            />
 
-          <Input
-            type="number"
-            value={position.y}
-            onChange={(e) => {
-              const y = Number(e.target.value);
-              updateNode(id, (n) => ({
-                ...n,
-                position: { ...n.position, y },
-              }));
-            }}
-          />
-        </div>
-      </Foldable>
+            <Input
+              type="number"
+              value={position.y}
+              onChange={(e) => {
+                const y = Number(e.target.value);
+                updateNode(id, (n) => ({
+                  ...n,
+                  position: { ...n.position, y },
+                }));
+              }}
+            />
+          </div>
 
-      {/* Rotation */}
-      <Foldable title="Rotation">
-        <Input
-          type="number"
-          value={rotation}
-          onChange={(e) => {
-            const r = Number(e.target.value);
-            updateNode(id, (n) => ({ ...n, rotation: r }));
-          }}
-        />
-      </Foldable>
+          <div className="flex flex-col gap-4">
+            <Label>Rotation</Label>
+          </div>
+          <div className="flex flex-col gap-4">
+            <Label>Scale</Label>
 
-      {/* Scale */}
-      <Foldable title="Scale">
-        <div className="flex gap-4">
-          <Input
-            type="number"
-            value={scale.width}
-            onChange={(e) => {
-              const w = Number(e.target.value);
-              updateNode(id, (n) => ({
-                ...n,
-                scale: { ...n.scale, width: w },
-              }));
-            }}
-          />
+            <Input
+              type="number"
+              value={scale.width}
+              onChange={(e) => {
+                const w = Number(e.target.value);
+                updateNode(id, (n) => ({
+                  ...n,
+                  scale: { ...n.scale, width: w },
+                }));
+              }}
+            />
 
-          <Input
-            type="number"
-            value={scale.height}
-            onChange={(e) => {
-              const h = Number(e.target.value);
-              updateNode(id, (n) => ({
-                ...n,
-                scale: { ...n.scale, height: h },
-              }));
-            }}
-          />
-        </div>
-      </Foldable>
+            <Input
+              type="number"
+              value={scale.height}
+              onChange={(e) => {
+                const h = Number(e.target.value);
+                updateNode(id, (n) => ({
+                  ...n,
+                  scale: { ...n.scale, height: h },
+                }));
+              }}
+            />
+          </div>
 
-      {/* Stroke */}
-      <Foldable title="Stroke">
-        <div className="flex gap-3 flex-wrap items-center">
-          <Slider
-            className={cn("w-[60%]")}
-            value={[stroke ?? 0]}
-            max={25}
-            min={0}
-            step={1}
-            onValueChange={(value) =>
-              updateNode(id, (n) => ({
-                ...n,
-                stroke: value[0],
-              }))
-            }
-          />
-          <span>{stroke ?? 0}px</span>
-        </div>
-      </Foldable>
+          <div className="flex gap-3">
+            <Label>Хүрээ</Label>
+            <Slider
+              className={cn("w-[60%]")}
+              value={[stroke ?? 0]}
+              max={25}
+              min={0}
+              step={1}
+              onValueChange={(value) =>
+                updateNode(id, (n) => ({
+                  ...n,
+                  stroke: value[0],
+                }))
+              }
+            />
+            <span>{stroke ?? 0}px</span>
+          </div>
 
-      {/* Children */}
-      <Foldable title="Хүүхэд">
-        <div className="w-full flex flex-col gap-4">
+          <Label>Хүүхэд</Label>
           {children?.length ? (
             children.map((c) => (
               <div

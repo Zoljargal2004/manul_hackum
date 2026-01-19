@@ -32,11 +32,13 @@ const GalleryFrame = ({ img }: { img: string }) => {
           alt="manul"
           className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
         />
-        <Button className="absolute right-4 bottom-4">
-          <a href={`/gallery/${img}.png`} download>
-            <Download />
-          </a>
-        </Button>
+        <a
+          className="absolute right-4 bottom-4 p-4 rounded-2xl " type="button"
+          href={`/gallery/${img}.png`}
+          download
+        >
+          <Download />
+        </a>
       </div>
     </div>
   );

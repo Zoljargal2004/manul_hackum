@@ -96,7 +96,6 @@ function drawNodeTree(
     ctx.textAlign = textAlign;
     ctx.textBaseline = "middle";
     
-    // Handle text wrapping if needed
     const words = node.text.split(" ");
     const maxWidth = node.scale.width;
     const lineHeight = fontSize * 1.2;
