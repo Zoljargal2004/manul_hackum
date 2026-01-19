@@ -237,6 +237,17 @@ export const NodeProperty = () => {
 
           <div className="flex flex-col gap-4">
             <Label>Rotation</Label>
+            <Slider
+              className={cn("w-[60%]")}
+              value={[rotation]}
+              max={360}
+              min={0}
+              step={1}
+              onValueChange={(value) =>
+                updateNode(id, (n) => ({ ...n, rotation: value[0] }))
+              }
+            />
+            <span>{rotation}°</span>
           </div>
           <div className="flex flex-col gap-4">
             <Label>Scale</Label>
