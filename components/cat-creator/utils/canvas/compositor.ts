@@ -4,9 +4,7 @@ import { searchNode } from "../node/search";
 
 const PADDING = 25;
 
-function degToRad(deg: number) {
-  return (deg * Math.PI) / 180;
-}
+
 
 export async function composeCanvas(
   canvas: HTMLCanvasElement,
@@ -48,9 +46,9 @@ export function drawNode(
   deg: number
 ) {
   ctx.save();
-  ctx.translate(x + w / 2, y + h / 2);
+  ctx.translate(x, y);
   ctx.rotate((deg * Math.PI) / 180);
-  ctx.drawImage(img, -w / 2, -h / 2, w, h);
+  ctx.drawImage(img, 0, 0, w, h);
   ctx.restore();
 }
 
@@ -63,22 +61,22 @@ function drawNodeTree(
 
   // move into this node's local space
   ctx.translate(
-    node.position.x + node.scale.width / 2,
-    node.position.y + node.scale.height / 2
+    node.position.x ,
+    node.position.y 
   );
 
   ctx.rotate((node.rotation * Math.PI) / 180);
 
   // draw this node
   if (node.id === "cat") {
-    ctx.drawImage(catBuffer, -node.scale.width / 2, -node.scale.height / 2);
+    ctx.drawImage(catBuffer, 0, 0);
   } else if (node.src) {
     ctx.drawImage(
       node.src,
-      -node.scale.width / 2,
-      -node.scale.height / 2,
-      node.scale.width,
-      node.scale.height
+      0,
+      0,
+      node.scale.width - PADDING,
+      node.scale.height - PADDING
     );
   } else if (node.text) {
     // Render text node

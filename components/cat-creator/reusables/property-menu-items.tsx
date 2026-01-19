@@ -47,24 +47,26 @@ export function SelectParent({
   const [internal, setInternal] = React.useState<string>("");
 
   React.useEffect(() => {
-    setInternal(value ?? "__root__");
+    setInternal("__root__");
   }, [value]);
 
   const ROOT = "__root__";
+
+  
 
   const parents = getAllNodesNames(nodes).map((id) => ({
     label: id,
     value: id,
   }));
+  parents.push({ label: "root", value: ROOT });
 
-  parents.unshift({ label: "root", value: ROOT });
 
   return (
     <div className="flex flex-col gap-2">
       <Label>Эцэг элемент</Label>
       <Popover open={open} onOpenChange={setOpen} modal={false}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="justify-between">
+          <Button variant="outline" className="justify-between hover:text-white">
             {parents.find((p) => p.value === internal)?.label ||
               "Select parent"}
             <ChevronsUpDownIcon className="ml-2 h-4 w-4 opacity-50" />

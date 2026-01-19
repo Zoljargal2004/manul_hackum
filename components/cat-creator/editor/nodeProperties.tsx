@@ -237,17 +237,17 @@ export const NodeProperty = () => {
 
           <div className="flex flex-col gap-4">
             <Label>Rotation</Label>
-            <Slider
+            <Input
               className={cn("w-[60%]")}
-              value={[rotation]}
-              max={360}
-              min={0}
-              step={1}
-              onValueChange={(value) =>
-                updateNode(id, (n) => ({ ...n, rotation: value[0] }))
+              type="number"
+              value={node.rotation}
+              onChange={(value) =>
+                updateNode(id, (n) => ({
+                  ...n,
+                  rotation: Number(value.target.value),
+                }))
               }
             />
-            <span>{rotation}°</span>
           </div>
           <div className="flex flex-col gap-4">
             <Label>Scale</Label>
@@ -385,7 +385,7 @@ function FontSelect({
                   <CheckIcon
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === font ? "opacity-100" : "opacity-0"
+                      value === font ? "opacity-100" : "opacity-0",
                     )}
                   />
                   <span style={{ fontFamily: font }}>{font}</span>

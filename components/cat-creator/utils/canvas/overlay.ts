@@ -4,7 +4,7 @@ import { searchNode } from "../node/search";
 export function drawRetriangle(
   canvas: HTMLCanvasElement,
   nodes: Node[],
-  selected: string | null
+  selected: string | null,
 ) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -22,14 +22,11 @@ export function drawRetriangle(
 function drawSelectionNode(
   ctx: CanvasRenderingContext2D,
   node: Node,
-  selected: string
+  selected: string,
 ) {
   ctx.save();
 
-  ctx.translate(
-    node.position.x + node.scale.width / 2,
-    node.position.y + node.scale.height / 2
-  );
+  ctx.translate(node.position.x, node.position.y);
 
   ctx.rotate((node.rotation * Math.PI) / 180);
 
@@ -42,26 +39,25 @@ function drawSelectionNode(
     ctx.strokeStyle = "#3b82f6";
     ctx.setLineDash([6, 4]);
 
-    ctx.strokeRect(-w / 2, -h / 2, w, h);
+    ctx.strokeRect(0, 0, w, h);
 
     // Draw resize handles (corners)
     ctx.fillStyle = "#3b82f6";
     ctx.setLineDash([]);
-    
+
     // Corner handles
     const corners = [
-      { x: 0, y: h / 2 }, // Top-left
-      { x: w / 2, y: 0 },  // Top-right
-      { x: w / 2, y: h / 2 },   // Bottom-right
+      { x: w/2, y: h }, // Top-left
+      { x: w, y: h/2 }, // Top-right
+      { x: w, y: h }, // Bottom-right
     ];
-
 
     corners.forEach((corner) => {
       ctx.fillRect(
         corner.x - handleSize / 2,
         corner.y - handleSize / 2,
         handleSize,
-        handleSize
+        handleSize,
       );
     });
   }
@@ -75,4 +71,3 @@ function drawSelectionNode(
 
   ctx.restore();
 }
-

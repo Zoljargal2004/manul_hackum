@@ -120,16 +120,16 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
       for (const n of nodeList) {
         // This node's center in world space
         const nodeCenter = {
-          x: accumulatedTransform.x + n.position.x + n.scale.width / 2,
-          y: accumulatedTransform.y + n.position.y + n.scale.height / 2,
+          x: accumulatedTransform.x + n.position.x,
+          y: accumulatedTransform.y + n.position.y,
         };
 
         if (n.id === targetId) return nodeCenter;
 
         if (n.children) {
           const nextTransform = {
-            x: accumulatedTransform.x + n.position.x + n.scale.width / 2,
-            y: accumulatedTransform.y + n.position.y + n.scale.height / 2,
+            x: accumulatedTransform.x + n.position.x,
+            y: accumulatedTransform.y + n.position.y,
           };
           const found = getWorldCenter(n.children, targetId, nextTransform);
           if (found) return found;

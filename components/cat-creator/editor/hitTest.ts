@@ -5,26 +5,26 @@ export function isInsideNode(
   node: Node,
   mouseX: number,
   mouseY: number,
-  worldPos: { x: number; y: number }
+  worldPos: { x: number; y: number },
 ) {
   return (
     mouseX >= worldPos.x &&
-    mouseX <= worldPos.x + node.scale.width &&
+    mouseX <= worldPos.x &&
     mouseY >= worldPos.y &&
-    mouseY <= worldPos.y + node.scale.height
+    mouseY <= worldPos.y
   );
 }
 
 export function findNewSelectedNode(
   nodes: Node[],
   x: number,
-  y: number
+  y: number,
 ): Node | null {
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i];
 
-    let lx = x - (node.position.x + node.scale.width / 2);
-    let ly = y - (node.position.y + node.scale.height / 2);
+    let lx = x - node.position.x;
+    let ly = y - node.position.y;
 
     if (node.rotation) {
       const rad = (-node.rotation * Math.PI) / 180;
@@ -43,10 +43,10 @@ export function findNewSelectedNode(
       if (found) return found;
     }
     if (
-      lx >= -node.scale.width / 2 &&
-      lx <= node.scale.width / 2 &&
-      ly >= -node.scale.height / 2 &&
-      ly <= node.scale.height / 2
+      lx >= 0 &&
+      lx <= node.scale.width &&
+      ly >= 0 &&
+      ly <= node.scale.height
     ) {
       return node;
     }
@@ -63,14 +63,14 @@ export function getResizeHandle(
   nodes: Node[],
   x: number,
   y: number,
-  selectedId: string
+  selectedId: string,
 ): ResizeHandle {
-  const allnodes=  getAllNodes(nodes)
+  const allnodes = getAllNodes(nodes);
   for (let i = allnodes.length - 1; i >= 0; i--) {
     const node = allnodes[i];
 
-    let lx = x - (node.position.x + node.scale.width / 2);
-    let ly = y - (node.position.y + node.scale.height / 2);
+    let lx = x - node.position.x;
+    let ly = y - node.position.y;
 
     if (node.rotation) {
       const rad = (-node.rotation * Math.PI) / 180;
@@ -92,31 +92,28 @@ export function getResizeHandle(
       const h = node.scale.height;
       const margin = HANDLE_SIZE / 2 + 4;
 
-      // console.log(lx, -w / 2, margin);
-      // console.log(lx, w / 2, margin);
-
       if (
-        lx >= -margin &&
-        lx <= +margin &&
-        ly >= h / 2 - margin &&
-        ly <= h / 2 + margin
+        lx >= w / 2 - margin &&
+        lx <= w / 2 + margin &&
+        ly >= h - margin &&
+        ly <= h + margin
       ) {
         return "s";
       }
       if (
-        lx >= w / 2 - margin &&
-        lx <= w / 2 + margin &&
-        ly >= -margin &&
-        ly <= +margin
+        lx >= w - margin &&
+        lx <= w + margin &&
+        ly >= h / 2 - margin &&
+        ly <= h / 2 + margin
       ) {
         return "e";
       }
 
       if (
-        lx >= w / 2 - margin &&
-        lx <= w / 2 + margin &&
-        ly >= h / 2 - margin &&
-        ly <= h / 2 + margin
+        lx >= w - margin &&
+        lx <= w + margin &&
+        ly >= h - margin &&
+        ly <= h + margin
       ) {
         return "se";
       }
