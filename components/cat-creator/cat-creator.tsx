@@ -101,8 +101,8 @@ export function CatCreator() {
             <div className="relative">
               <canvas
                 ref={canvasRef}
-                width={1400}
-                height={1300}
+                width={800}
+                height={600}
                 className="w-full border rounded block"
                 onMouseDown={(e) =>
                   mouseDown(
@@ -169,8 +169,8 @@ export function CatCreator() {
 
               <canvas
                 ref={overlayRef}
-                width={1400}
-                height={1300}
+                width={800}
+                height={600}
                 className="w-full absolute top-0 left-0 pointer-events-none"
               />
             </div>

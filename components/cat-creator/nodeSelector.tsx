@@ -54,11 +54,7 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
   const [scale, setScale] = useState({ width: 200, height: 50 });
   const [imageRatio, setImageRatio] = useState(1);
 
-  const [parent, setParent] = useState<string | null>(selected);
-
-  useEffect(() => {
-    setParent(selected);
-  }, [selected]);
+  const [parent, setParent] = useState<string | null>(null);
 
   useEffect(() => {
     if (!file) {
@@ -81,7 +77,6 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
 
   const handleAddNode = async () => {
     if (!id.trim()) return;
-    
     if (nodeType === "image") {
       if (!file) return;
 
@@ -98,10 +93,11 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
         parent,
         stroke: 0,
       };
-
+      console.log(parent);
       if (parent) {
         adoptNode(parent, new_node);
       } else {
+        console.log("new node", new_node);
         addNode(new_node);
       }
     } else {
@@ -192,11 +188,7 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
                 placeholder="Текст оруулах..."
               />
             </div>
-            <ImageSizeControl
-              scale={scale}
-              setScale={setScale}
-              ratio={1}
-            />
+            <ImageSizeControl scale={scale} setScale={setScale} ratio={1} />
           </>
         )}
 
@@ -284,7 +276,7 @@ const ImageSizeControl = ({
           onClick={() => setLock((p) => !p)}
           className={cn(
             "h-9 w-9 rounded-md border flex items-center justify-center",
-            lock ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+            lock ? "bg-primary text-primary-foreground" : "hover:bg-muted",
           )}
         >
           {lock ? <Link size={16} /> : <Lock size={16} />}
@@ -293,4 +285,3 @@ const ImageSizeControl = ({
     </div>
   );
 };
-

@@ -25,6 +25,7 @@ export type Node = {
     width: number;
     height: number;
   };
+  special?: true
   flip?: boolean
   rotation: number;
   children?: Node[];

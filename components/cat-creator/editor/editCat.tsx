@@ -38,7 +38,7 @@ export const Foldable = ({
           <MoveRight
             className={cn(
               "transition-all duration-300 stroke-1",
-              folded ? `rotate-0` : "rotate-90"
+              folded ? `rotate-0` : "rotate-90",
             )}
           />
         }
@@ -47,9 +47,7 @@ export const Foldable = ({
       <div
         className={cn(
           "transition-all duration-300 overflow-hidden",
-          folded
-            ? "max-h-0 opacity-0 pointer-events-none"
-            : " opacity-100"
+          folded ? "max-h-0 opacity-0 pointer-events-none" : " opacity-100",
         )}
       >
         <div className="pt-3">{children}</div>
@@ -58,11 +56,7 @@ export const Foldable = ({
   );
 };
 
-export const EditCat = ({
-  menuOrder,
-  layers,
-  setLayer,
-}: EditCatProps) => {
+export const EditCat = ({ menuOrder, layers, setLayer }: EditCatProps) => {
   const { nodes, updateNode } = useNodes();
   const catNode = searchNode(nodes, "cat");
   const stroke = catNode?.stroke ?? 0;
@@ -75,24 +69,6 @@ export const EditCat = ({
         </div>
       </Card>
 
-      <Foldable title="Хүрээ">
-        <div className="flex gap-3 flex-wrap">
-          <Slider
-            className={cn("w-[60%]")}
-            value={[stroke]}
-            max={25}
-            min={0}
-            step={1}
-            onValueChange={(value) =>
-              updateNode("cat", (n) => ({
-                ...n,
-                stroke: value[0],
-              }))
-            }
-          />
-          <span>{stroke}px</span>
-        </div>
-      </Foldable>
       <Foldable title="Catze">
         {menuOrder.map((key) => (
           <div key={key} className="p-4 space-y-3">

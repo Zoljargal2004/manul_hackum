@@ -6,6 +6,8 @@ import { FieldLabel, Section } from "./nodeProperties";
 import { NumberPair } from "./nodePair";
 import { StrokeControl } from "./strokePanel";
 import { ChildrenList } from "./childrenList";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Node } from "../cat-creator-types";
 
 export function TransformPanel({
   node,
@@ -13,16 +15,28 @@ export function TransformPanel({
   selectNode,
   moveNode,
 }: any) {
-  const { id, position, rotation, scale, stroke, children } = node;
+  const { id, position, rotation, scale, stroke, children, flip } = node;
 
   return (
     <Foldable title="Transform">
       <Section>
         <div className="space-y-5">
-
           <div className="grid grid-cols-2 gap-3">
             <Button onClick={() => moveNode(id, "up")}>⬆ Up</Button>
             <Button onClick={() => moveNode(id, "down")}>⬇ Down</Button>
+          </div>
+          <div className="space-y-2 ">
+            <FieldLabel>Flip</FieldLabel>
+            <Checkbox
+              checked={!!flip}
+              className="size-8"
+              onCheckedChange={(e) =>
+                updateNode(id, (n: Node) => ({
+                  ...n,
+                  flip: e,
+                }))
+              }
+            />
           </div>
 
           <div className="space-y-2">
@@ -100,7 +114,6 @@ export function TransformPanel({
               onSelect={selectNode}
             />
           </div>
-
         </div>
       </Section>
     </Foldable>

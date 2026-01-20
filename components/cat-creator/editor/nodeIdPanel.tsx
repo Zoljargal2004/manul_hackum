@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Foldable } from "./editCat";
 import { FieldLabel, Section } from "./nodeProperties";
@@ -11,6 +11,7 @@ export function NodeIdPanel({
   updateNode: any;
 }) {
   const [newId, setNewId] = useState(id);
+  useEffect(() => setNewId(id), [id]);
 
   return (
     <Foldable title="ID">

@@ -21,14 +21,15 @@ const NodeContext = createContext<NodeContextType | null>(null);
 
 export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   const [nodes, setNodes] = useState<Node[]>([
-    {
-      id: "cat",
-      position: { x: 100, y: 100 },
-      scale: { width: 700, height: 650 },
-      rotation: 0,
-      parent: null,
-      stroke: 0,
-    },
+    // {
+    //   id: "cat",
+    //   position: { x: 100, y: 100 },
+    //   scale: { width: 700, height: 650 },
+    //   rotation: 0,
+    //   parent: null,
+    //   stroke: 0,
+    //   special: true
+    // },
   ]);
 
   const undoStack = useRef<Node[][]>([]);
@@ -54,7 +55,7 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
     setNodes(next);
   }
 
-  const [selected, setSelected] = useState<string | null>("cat");
+  const [selected, setSelected] = useState<string | null>(null);
 
   const selectNode = (id: string | null) => {
     setSelected(id);
@@ -87,6 +88,7 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   }
 
   const addNode = (node: Node) => {
+    console.log(",asdfsdf",node)
     commit([...nodes, node]);
   };
 
