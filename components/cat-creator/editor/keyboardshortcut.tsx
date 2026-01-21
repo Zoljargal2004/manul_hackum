@@ -43,12 +43,22 @@ export function KeyboardShortcuts() {
       } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
         e.preventDefault();
         undo();
+      } else if(e.key ==="Shift"){
+        setToggleRation(true)
+        return
       }
 
     };
 
+    const onKeyUp = (e: KeyboardEvent) => {
+      if(e.key ==="Shift"){
+        setToggleRation(false)
+      }
+    }
+
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => {window.removeEventListener("keydown", onKeyDown)};
   }, [selected, removeNode]);
 
   return null;

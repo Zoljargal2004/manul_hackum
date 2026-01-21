@@ -35,7 +35,7 @@ export function CatCreator() {
     selected,
     selectNode,
     updateNode,
-    updateNodeRaw, } = useNodes()
+    updateNodeRaw } = useNodes()
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [layers, setLayers] = useState<Layers>(selectedNode?.layers || buildInitialLayers());
   const bufferRef = useRef<HTMLCanvasElement | null>(null);

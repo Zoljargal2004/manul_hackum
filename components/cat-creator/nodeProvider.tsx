@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { BASE_SRC, DRAW_ORDER, Layers, Node, PARTS } from "./cat-creator-types";
 import { buildInitialLayers } from "./utils/layer/initial";
 import { searchNode } from "./utils/node/search";
@@ -19,7 +19,8 @@ type NodeContextType = {
   updateNodeRaw: (id: string, updater: (n: Node) => Node) => void;
   moveNode: (id: string, direction: "up" | "down") => void;
   selectedNode: Node | null
-  setToggleRation: (toggle: boolean) => void
+  setToggleRation: (toggle: boolean) => void,
+  nodeRatio : number
 };
 
 const NodeContext = createContext<NodeContextType | null>(null);
@@ -41,10 +42,11 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
     }
   ]);
 
+  const nodeRatio = useRef<number>(1)
+
+
   const undoStack = useRef<Node[][]>([]);
   const redoStack = useRef<Node[][]>([]);
-
-  console.log(toggleRation)
 
   function commit(next: Node[]) {
     undoStack.current.push(nodes);
@@ -67,6 +69,12 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   }
 
   const selectedNode = searchNode(nodes, selected)
+
+  useEffect(() => {
+    if (!selectedNode) return
+    const { width, height } = selectedNode.scale
+    nodeRatio.current = width / height
+  }, [selected])
 
 
   const selectNode = (id: string | null) => {
@@ -313,6 +321,7 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   return (
     <NodeContext.Provider
       value={{
+        nodeRatio: nodeRatio.current,
         setToggleRation,
         selectedNode,
         nodes,
