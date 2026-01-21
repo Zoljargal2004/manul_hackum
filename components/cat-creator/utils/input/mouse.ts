@@ -56,7 +56,6 @@ export const mouseDown = (
     }
   }
 
-  // Otherwise check for node selection/dragging
   let node = findNewSelectedNode(nodes, pos.x, pos.y);
   if (!node) {
     resizeHandle.current = null;
@@ -108,7 +107,7 @@ export const mouseMove = (
       case "e":
         newWidth = resizeStart.current.width + deltaX;
         break;
-      case "se": // south east bb
+      case "se": 
         newWidth = resizeStart.current.width + deltaX;
         newHeight = resizeStart.current.height + deltaY;
         break;

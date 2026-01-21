@@ -25,7 +25,7 @@ export type Node = {
     width: number;
     height: number;
   };
-  special?: true
+  special?: boolean
   flip?: boolean
   rotation: number;
   children?: Node[];
@@ -39,6 +39,7 @@ export type Node = {
   textAlign?: "left" | "center" | "right";
 
   src?: HTMLImageElement;
+  layers? : Layers
 };
 
 export type Layers = Record<PartKey, string | null>;
@@ -100,4 +101,4 @@ export const PARTS: Record<PartKey, PartConfig> = {
   },
 };
 
-export const BASE_SRC = "/create-cat/base.png";
+export const BASE_SRC = "/create-cat/base/base.svg";

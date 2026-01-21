@@ -1,39 +1,22 @@
-import { Layers, Node } from "../../cat-creator-types";
-import { renderCat } from "./renderer";
+"use client"
+import { BASE_SRC, DRAW_ORDER, Layers, Node, PartKey, PARTS } from "../../cat-creator-types";
+import { drawImage, renderCat } from "./renderer";
 import { searchNode } from "../node/search";
+import { useNodes } from "../../nodeProvider";
 
-const PADDING = 25;
+let PADDING = 25;
 
 export async function composeCanvas(
   canvas: HTMLCanvasElement,
   buffer: HTMLCanvasElement,
-  layers: Layers,
   nodes: Node[],
+  updateNode: (id: string, fn: (n: Node) => Node) => void
 ) {
-  console.log(nodes)
   const ctx = canvas.getContext("2d");
-  const bctx = buffer.getContext("2d");
-  if (!ctx || !bctx) return;
+  if (!ctx) return;
 
-  const catNode = searchNode(nodes, "cat");
-  // if (!catNode) return;
 
-  // const { width, height } = catNode.scale;
-  // const catStroke = catNode.stroke ?? 0;
 
-  // bctx.setTransform(1, 0, 0, 1, 0, 0);
-  bctx.clearRect(0, 0, buffer.width, buffer.height);
-  // bctx.translate(PADDING, PADDING);
-
-  // await renderCat(
-  //   bctx,
-  //   width - PADDING * 2,
-  //   height - PADDING * 2,
-  //   layers,
-  //   catStroke,
-  // );
-
-  // ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   nodes.forEach((root) => {
@@ -41,21 +24,79 @@ export async function composeCanvas(
   });
 }
 
-export function drawNode(
-  ctx: CanvasRenderingContext2D,
-  img: CanvasImageSource,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  deg: number,
+
+export async function DrawSpecials(
+  nodes: Node[],
+  updateNode: (id: string, fn: (n: Node) => Node) => void
 ) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate((deg * Math.PI) / 180);
-  ctx.drawImage(img, 0, 0, w, h);
-  ctx.restore();
+  for (const node of nodes) {
+    if (node.special && node.layers) {
+      await BuildSpecialHtmlElement(node, updateNode);
+    }
+
+    if (node.children?.length) {
+      await DrawSpecials(node.children, updateNode);
+    }
+  }
 }
+
+
+async function BuildSpecialHtmlElement(
+  node: Node,
+  updateNode: (id: string, fn: (n: Node) => Node) => void
+) {
+  if (!node.layers) return;
+
+  const { width, height } = node.scale;
+
+  const buffer = document.createElement("canvas");
+  buffer.width = width;
+  buffer.height = height;
+
+  const ctx = buffer.getContext("2d");
+  if (!ctx) return;
+
+  // base
+  const base = await loadImage(BASE_SRC);
+  ctx.drawImage(base, 0, 0, width, height);
+
+  // parts
+  for (const key of DRAW_ORDER) {
+    const src = node.layers[key as PartKey];
+    if (!src) continue;
+
+    const part = await loadImage(src);
+    const [rx, ry, rw, rh] = PARTS[key].position;
+
+    ctx.drawImage(
+      part,
+      rx * width,
+      ry * height,
+      rw * width,
+      rh * height
+    );
+  }
+
+  const img = await loadImage(buffer.toDataURL());
+  console.log("img type", typeof img)
+
+  updateNode(node.id, (prev) => ({
+    ...prev,
+    src: img
+  }));
+}
+
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+
 
 function drawNodeTree(
   ctx: CanvasRenderingContext2D,
@@ -69,20 +110,17 @@ function drawNodeTree(
   ctx.rotate((node.rotation * Math.PI) / 180);
 
   if (node.flip) {
-    ctx.translate(node.scale.width, 0);
+    ctx.translate(node.scale.width, 0)
     ctx.scale(-1, 1);
-  }
 
-  // draw this node
-  if (node.id === "cat") {
-    ctx.drawImage(catBuffer, 0, 0);
-  } else if (node.src) {
+  }
+  if (node.src) {
     ctx.drawImage(
       node.src,
-      0,
-      0,
-      node.scale.width - PADDING,
-      node.scale.height - PADDING,
+      PADDING,
+      PADDING,
+      node.scale.width - PADDING * 2,
+      node.scale.height - PADDING * 2,
     );
   } else if (node.text) {
     // Render text node
@@ -131,7 +169,7 @@ function drawNodeTree(
       } else if (textAlign === "right") {
         x = maxWidth / 2;
       }
-      ctx.fillText(textLine, x, startY + index * lineHeight);
+      ctx.fillText(textLine, x + node.scale.width / 2, startY + index * lineHeight + node.scale.height / 2);
     });
 
     ctx.restore();
@@ -139,19 +177,9 @@ function drawNodeTree(
 
   const stroke = node.stroke ?? 0;
   if (stroke > 0) {
-    // ctx.save();
-    // ctx.strokeStyle = "#000000";
-    // ctx.lineWidth = stroke;
-    // ctx.strokeRect(
-    //   -node.scale.width / 2 + stroke / 2,
-    //   -node.scale.height / 2 + stroke / 2,
-    //   node.scale.width - stroke,
-    //   node.scale.height - stroke
-    // );
-    // ctx.restore();
+
   }
 
-  // draw children inside this space
   if (node.children) {
     node.children.forEach((child) => {
       drawNodeTree(ctx, child, catBuffer);

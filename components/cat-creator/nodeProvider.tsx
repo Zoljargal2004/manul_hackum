@@ -1,7 +1,10 @@
 "use client";
 
 import { createContext, useContext, useRef, useState } from "react";
-import { Node } from "./cat-creator-types";
+import { BASE_SRC, DRAW_ORDER, Layers, Node, PARTS } from "./cat-creator-types";
+import { buildInitialLayers } from "./utils/layer/initial";
+import { searchNode } from "./utils/node/search";
+import { drawImage } from "./utils/canvas/renderer";
 
 type NodeContextType = {
   nodes: Node[];
@@ -15,25 +18,33 @@ type NodeContextType = {
   redo: () => void;
   updateNodeRaw: (id: string, updater: (n: Node) => Node) => void;
   moveNode: (id: string, direction: "up" | "down") => void;
+  selectedNode: Node | null
+  setToggleRation: (toggle: boolean) => void
 };
 
 const NodeContext = createContext<NodeContextType | null>(null);
 
 export const NodeManager = ({ children }: { children: React.ReactNode }) => {
+  const [toggleRation, setToggleRation] = useState(false)
+  const [selected, setSelected] = useState<string | null>("cat");
+
   const [nodes, setNodes] = useState<Node[]>([
-    // {
-    //   id: "cat",
-    //   position: { x: 100, y: 100 },
-    //   scale: { width: 700, height: 650 },
-    //   rotation: 0,
-    //   parent: null,
-    //   stroke: 0,
-    //   special: true
-    // },
+    {
+      id: "cat",
+      position: { x: 100, y: 100 },
+      scale: { width: 700, height: 650 },
+      rotation: 0,
+      parent: null,
+      stroke: 0,
+      special: true,
+      layers: buildInitialLayers()
+    }
   ]);
 
   const undoStack = useRef<Node[][]>([]);
   const redoStack = useRef<Node[][]>([]);
+
+  console.log(toggleRation)
 
   function commit(next: Node[]) {
     undoStack.current.push(nodes);
@@ -55,7 +66,8 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
     setNodes(next);
   }
 
-  const [selected, setSelected] = useState<string | null>(null);
+  const selectedNode = searchNode(nodes, selected)
+
 
   const selectNode = (id: string | null) => {
     setSelected(id);
@@ -88,7 +100,7 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   }
 
   const addNode = (node: Node) => {
-    console.log(",asdfsdf",node)
+    console.log(",asdfsdf", node)
     commit([...nodes, node]);
   };
 
@@ -296,9 +308,13 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
     commit(insert(nodes));
   };
 
+
+
   return (
     <NodeContext.Provider
       value={{
+        setToggleRation,
+        selectedNode,
         nodes,
         selected,
         selectNode,
@@ -332,6 +348,7 @@ function roundNode(node: Node): Node {
     children: node.children?.map(roundNode),
   };
 }
+
 
 export const useNodes = () => {
   const ctx = useContext(NodeContext);

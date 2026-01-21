@@ -17,7 +17,7 @@ import {
 } from "./utils/input/mouse";
 import { ResizeHandle, getResizeHandle } from "./editor/hitTest";
 import { findNewSelectedNode, isInsideNode } from "./editor/hitTest";
-import { composeCanvas } from "./utils/canvas/compositor";
+import { composeCanvas, DrawSpecials } from "./utils/canvas/compositor";
 import { drawRetriangle } from "./utils/canvas/overlay";
 import { createBufferCanvas } from "./utils/canvas/buffer";
 import { EditCat } from "./editor/editCat";
@@ -31,20 +31,17 @@ import { useNodes } from "./nodeProvider";
 import { SelectParent } from "./reusables/property-menu-items";
 
 export function CatCreator() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [layers, setLayers] = useState<Layers>(buildInitialLayers);
-  const bufferRef = useRef<HTMLCanvasElement | null>(null);
-  const overlayRef = useRef<HTMLCanvasElement | null>(null);
-  const [dragging, setDragging] = useState(false);
-  const {
-    nodes,
+  const { selectedNode, nodes,
     selected,
     selectNode,
     updateNode,
-    addNode,
-    removeNode,
-    updateNodeRaw,
-  } = useNodes();
+    updateNodeRaw, } = useNodes()
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [layers, setLayers] = useState<Layers>(selectedNode?.layers || buildInitialLayers());
+  const bufferRef = useRef<HTMLCanvasElement | null>(null);
+  const overlayRef = useRef<HTMLCanvasElement | null>(null);
+  const [dragging, setDragging] = useState(false);
+
   const dragStartNodes = useRef<Node[] | null>(null);
 
   const dragOffset = useRef({ x: 0, y: 0 });
@@ -59,13 +56,16 @@ export function CatCreator() {
   useEffect(() => {
     bufferRef.current = createBufferCanvas(1400, 1300);
   }, []);
+  useEffect(() => { }, [layers])
 
   const menuOrder = useMemo(() => DRAW_ORDER, []);
 
   useEffect(() => {
     if (!dragging)
-      composeCanvas(canvasRef.current!, bufferRef.current!, layers, nodes);
+      composeCanvas(canvasRef.current!, bufferRef.current!, nodes, updateNode);
   }, [layers, nodes, dragging]);
+
+  useEffect(()=>{DrawSpecials(nodes, updateNode)}, [layers])
 
   useEffect(() => {
     if (!overlayRef.current) return;
@@ -119,7 +119,6 @@ export function CatCreator() {
                   )
                 }
                 onMouseMove={(e) => {
-                  // console.log(dragging, selected, canvasRef.current)
                   if (!dragging && selected && canvasRef.current) {
                     const pos = getMousePos(e, canvasRef.current);
                     const handle = getResizeHandle(

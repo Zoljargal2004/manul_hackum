@@ -22,29 +22,14 @@ export function drawImage(
   });
 }
 
-export async function renderCat(
+export function renderCat(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
   layers: Layers,
   stroke: number = 0
 ) {
-  ctx.clearRect(0, 0, width, height);
-  await drawImage(ctx, BASE_SRC, 0, 0, width, height);
-
-  for (const key of DRAW_ORDER) {
-    const src = layers[key];
-    if (!src) continue;
-
-    const [rx, ry, rw, rh] = PARTS[key].position;
-
-    const x = rx * width;
-    const y = ry * height;
-    const w = rw * width;
-    const h = rh * height;
-
-    await drawImage(ctx, src, x, y, w, h);
-  }
+ 
 
   // Apply stroke around the cat if stroke width > 0
   if (stroke > 0) {

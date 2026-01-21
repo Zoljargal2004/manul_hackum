@@ -6,7 +6,7 @@ import { composeCanvas } from "../utils/canvas/compositor";
 import { searchNode } from "../utils/node/search";
 
 export function KeyboardShortcuts() {
-  const { selected, removeNode, undo, redo, nodes, addNode, adoptNode } =
+  const { selected, removeNode, undo, redo, nodes, addNode, adoptNode, setToggleRation } =
     useNodes();
 
   useEffect(() => {
@@ -16,13 +16,13 @@ export function KeyboardShortcuts() {
         e.preventDefault();
         removeNode(selected);
       }
-      if (e.ctrlKey && e.key.toLowerCase() === "d") {
+      else if (e.ctrlKey && e.key.toLowerCase() === "d") {
         e.preventDefault();
         const node = searchNode(nodes, selected);
         if (!node) return;
         let number = 0;
         const duplicateNode = (num: number) => {
-          num++;
+          num = Number(num + 1);
           const searchy = searchNode(nodes, `${node.id} ${num}`);
           if (!searchy) {
             if (!node.parent) addNode({ ...node, id: `${node.id} ${num}` });
@@ -44,6 +44,7 @@ export function KeyboardShortcuts() {
         e.preventDefault();
         undo();
       }
+
     };
 
     window.addEventListener("keydown", onKeyDown);
