@@ -31,13 +31,19 @@ import { useNodes } from "./nodeProvider";
 import { SelectParent } from "./reusables/property-menu-items";
 
 export function CatCreator() {
-  const { selectedNode, nodes,
+  const {
+    selectedNode,
+    nodes,
     selected,
     selectNode,
     updateNode,
-    updateNodeRaw } = useNodes()
+    updateNodeRaw,
+    updateCat,
+  } = useNodes();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [layers, setLayers] = useState<Layers>(selectedNode?.layers || buildInitialLayers());
+  const [layers, setLayers] = useState<Layers>(
+    selectedNode?.layers || buildInitialLayers(),
+  );
   const bufferRef = useRef<HTMLCanvasElement | null>(null);
   const overlayRef = useRef<HTMLCanvasElement | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -56,7 +62,9 @@ export function CatCreator() {
   useEffect(() => {
     bufferRef.current = createBufferCanvas(1400, 1300);
   }, []);
-  useEffect(() => { }, [layers])
+  useEffect(() => {
+    updateCat(layers);
+  }, [layers]);
 
   const menuOrder = useMemo(() => DRAW_ORDER, []);
 
@@ -65,7 +73,9 @@ export function CatCreator() {
       composeCanvas(canvasRef.current!, bufferRef.current!, nodes, updateNode);
   }, [layers, nodes, dragging]);
 
-  useEffect(()=>{DrawSpecials(nodes, updateNode)}, [layers])
+  useEffect(() => {
+    DrawSpecials(nodes, updateNode);
+  }, [layers]);
 
   useEffect(() => {
     if (!overlayRef.current) return;
@@ -115,7 +125,7 @@ export function CatCreator() {
                     dragStartNodes,
                     selected,
                     resizeHandle,
-                    resizeStart
+                    resizeStart,
                   )
                 }
                 onMouseMove={(e) => {
@@ -125,7 +135,7 @@ export function CatCreator() {
                       nodes,
                       pos.x,
                       pos.y,
-                      selected
+                      selected,
                     );
                     if (handle) {
                       const cursors: Record<
@@ -151,7 +161,7 @@ export function CatCreator() {
                     selected,
                     updateNodeRaw,
                     resizeHandle,
-                    resizeStart
+                    resizeStart,
                   );
                 }}
                 onMouseUp={() => {
@@ -161,7 +171,7 @@ export function CatCreator() {
                     dragging,
                     updateNode,
                     selected,
-                    resizeHandle
+                    resizeHandle,
                   );
                 }}
               />

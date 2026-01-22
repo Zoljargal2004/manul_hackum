@@ -93,11 +93,9 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
         parent,
         stroke: 0,
       };
-      console.log(parent);
       if (parent) {
         adoptNode(parent, new_node);
       } else {
-        console.log("new node", new_node);
         addNode(new_node);
       }
     } else {

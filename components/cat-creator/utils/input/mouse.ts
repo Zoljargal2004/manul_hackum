@@ -93,7 +93,6 @@ export const mouseMove = (
   const pos = getMousePos(e, canvasRef.current);
 
   if (resizeHandle.current && resizeStart.current) {
-    console.log(pos, resizeStart.current)
     const deltaX = pos.x - resizeStart.current.x;
     const deltaY = pos.y - resizeStart.current.y;
 

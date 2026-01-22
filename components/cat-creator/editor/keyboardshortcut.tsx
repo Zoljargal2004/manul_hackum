@@ -20,6 +20,7 @@ export function KeyboardShortcuts() {
         e.preventDefault();
         const node = searchNode(nodes, selected);
         if (!node) return;
+        if(node.id === "cat") return
         let number = 0;
         const duplicateNode = (num: number) => {
           num = Number(num + 1);

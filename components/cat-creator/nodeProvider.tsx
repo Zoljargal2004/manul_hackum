@@ -1,10 +1,9 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { BASE_SRC, DRAW_ORDER, Layers, Node, PARTS } from "./cat-creator-types";
+import { Layers, Node } from "./cat-creator-types";
 import { buildInitialLayers } from "./utils/layer/initial";
 import { searchNode } from "./utils/node/search";
-import { drawImage } from "./utils/canvas/renderer";
 
 type NodeContextType = {
   nodes: Node[];
@@ -18,15 +17,16 @@ type NodeContextType = {
   redo: () => void;
   updateNodeRaw: (id: string, updater: (n: Node) => Node) => void;
   moveNode: (id: string, direction: "up" | "down") => void;
-  selectedNode: Node | null
-  setToggleRation: (toggle: boolean) => void,
-  nodeRatio : number
+  selectedNode: Node | null;
+  setToggleRation: (toggle: boolean) => void;
+  nodeRatio: number;
+  updateCat: (layer: Layers) => void;
 };
 
 const NodeContext = createContext<NodeContextType | null>(null);
 
 export const NodeManager = ({ children }: { children: React.ReactNode }) => {
-  const [toggleRation, setToggleRation] = useState(false)
+  const [toggleRation, setToggleRation] = useState(false);
   const [selected, setSelected] = useState<string | null>("cat");
 
   const [nodes, setNodes] = useState<Node[]>([
@@ -38,12 +38,11 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
       parent: null,
       stroke: 0,
       special: true,
-      layers: buildInitialLayers()
-    }
+      layers: buildInitialLayers(),
+    },
   ]);
 
-  const nodeRatio = useRef<number>(1)
-
+  const nodeRatio = useRef<number>(1);
 
   const undoStack = useRef<Node[][]>([]);
   const redoStack = useRef<Node[][]>([]);
@@ -68,14 +67,13 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
     setNodes(next);
   }
 
-  const selectedNode = searchNode(nodes, selected)
+  const selectedNode = searchNode(nodes, selected);
 
   useEffect(() => {
-    if (!selectedNode) return
-    const { width, height } = selectedNode.scale
-    nodeRatio.current = width / height
-  }, [selected])
-
+    if (!selectedNode) return;
+    const { width, height } = selectedNode.scale;
+    nodeRatio.current = width / height;
+  }, [selected]);
 
   const selectNode = (id: string | null) => {
     setSelected(id);
@@ -108,7 +106,6 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   }
 
   const addNode = (node: Node) => {
-    console.log(",asdfsdf", node)
     commit([...nodes, node]);
   };
 
@@ -130,14 +127,12 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   function moveNodeById(
     nodes: Node[],
     id: string,
-    direction: "up" | "down"
+    direction: "up" | "down",
   ): Node[] {
-    // Helper to calculate world center position of a node
-    // The renderer translates by (position + scale/2) for each node
     function getWorldCenter(
       nodeList: Node[],
       targetId: string,
-      accumulatedTransform = { x: 0, y: 0 }
+      accumulatedTransform = { x: 0, y: 0 },
     ): { x: number; y: number } | null {
       for (const n of nodeList) {
         // This node's center in world space
@@ -174,7 +169,7 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
     function helper(
       list: Node[],
       parent: Node | null,
-      ancestorPos = { x: 0, y: 0 }
+      ancestorPos = { x: 0, y: 0 },
     ): { nodes: Node[]; absorbed?: Node } {
       const copy = [...list];
       const index = copy.findIndex((n) => n.id === id);
@@ -207,21 +202,37 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
             // New parent (old child) should appear at child's old world center
             // Its position relative to grandparent should be:
             const newParentPos = {
-              x: childWorldCenter.x - child.scale.width / 2 - grandparentCenterPos.x,
-              y: childWorldCenter.y - child.scale.height / 2 - grandparentCenterPos.y,
+              x:
+                childWorldCenter.x -
+                child.scale.width / 2 -
+                grandparentCenterPos.x,
+              y:
+                childWorldCenter.y -
+                child.scale.height / 2 -
+                grandparentCenterPos.y,
             };
 
             // After swap, new parent's center will be at:
             const newParentWorldCenter = {
-              x: grandparentCenterPos.x + newParentPos.x + child.scale.width / 2,
-              y: grandparentCenterPos.y + newParentPos.y + child.scale.height / 2,
+              x:
+                grandparentCenterPos.x + newParentPos.x + child.scale.width / 2,
+              y:
+                grandparentCenterPos.y +
+                newParentPos.y +
+                child.scale.height / 2,
             };
 
             // New child (old parent) should appear at parent's old world center
             // Its position relative to new parent's center should be:
             const newChildPos = {
-              x: parentWorldCenter.x - parent.scale.width / 2 - newParentWorldCenter.x,
-              y: parentWorldCenter.y - parent.scale.height / 2 - newParentWorldCenter.y,
+              x:
+                parentWorldCenter.x -
+                parent.scale.width / 2 -
+                newParentWorldCenter.x,
+              y:
+                parentWorldCenter.y -
+                parent.scale.height / 2 -
+                newParentWorldCenter.y,
             };
 
             const newParentNode: Node = {
@@ -316,11 +327,17 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
     commit(insert(nodes));
   };
 
-
+  const updateCat = (layers: Layers) => {
+    const node = searchNode(nodes, "cat");
+    if (!node) return;
+    node.layers = layers;
+    // Drawspecials
+  };
 
   return (
     <NodeContext.Provider
       value={{
+        updateCat,
         nodeRatio: nodeRatio.current,
         setToggleRation,
         selectedNode,
@@ -357,7 +374,6 @@ function roundNode(node: Node): Node {
     children: node.children?.map(roundNode),
   };
 }
-
 
 export const useNodes = () => {
   const ctx = useContext(NodeContext);

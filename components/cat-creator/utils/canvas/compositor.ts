@@ -1,8 +1,12 @@
-"use client"
-import { BASE_SRC, DRAW_ORDER, Layers, Node, PartKey, PARTS } from "../../cat-creator-types";
-import { drawImage, renderCat } from "./renderer";
-import { searchNode } from "../node/search";
-import { useNodes } from "../../nodeProvider";
+"use client";
+import {
+  BASE_SRC,
+  DRAW_ORDER,
+  Layers,
+  Node,
+  PartKey,
+  PARTS,
+} from "../../cat-creator-types";
 
 let PADDING = 25;
 
@@ -10,12 +14,10 @@ export async function composeCanvas(
   canvas: HTMLCanvasElement,
   buffer: HTMLCanvasElement,
   nodes: Node[],
-  updateNode: (id: string, fn: (n: Node) => Node) => void
+  updateNode: (id: string, fn: (n: Node) => Node) => void,
 ) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
-
-
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -24,10 +26,9 @@ export async function composeCanvas(
   });
 }
 
-
 export async function DrawSpecials(
   nodes: Node[],
-  updateNode: (id: string, fn: (n: Node) => Node) => void
+  updateNode: (id: string, fn: (n: Node) => Node) => void,
 ) {
   for (const node of nodes) {
     if (node.special && node.layers) {
@@ -40,10 +41,9 @@ export async function DrawSpecials(
   }
 }
 
-
 async function BuildSpecialHtmlElement(
   node: Node,
-  updateNode: (id: string, fn: (n: Node) => Node) => void
+  updateNode: (id: string, fn: (n: Node) => Node) => void,
 ) {
   if (!node.layers) return;
 
@@ -68,24 +68,16 @@ async function BuildSpecialHtmlElement(
     const part = await loadImage(src);
     const [rx, ry, rw, rh] = PARTS[key].position;
 
-    ctx.drawImage(
-      part,
-      rx * width,
-      ry * height,
-      rw * width,
-      rh * height
-    );
+    ctx.drawImage(part, rx * width, ry * height, rw * width, rh * height);
   }
 
   const img = await loadImage(buffer.toDataURL());
-  console.log("img type", typeof img)
 
   updateNode(node.id, (prev) => ({
     ...prev,
-    src: img
+    src: img,
   }));
 }
-
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -95,8 +87,6 @@ function loadImage(src: string): Promise<HTMLImageElement> {
     img.src = src;
   });
 }
-
-
 
 function drawNodeTree(
   ctx: CanvasRenderingContext2D,
@@ -110,9 +100,8 @@ function drawNodeTree(
   ctx.rotate((node.rotation * Math.PI) / 180);
 
   if (node.flip) {
-    ctx.translate(node.scale.width, 0)
+    ctx.translate(node.scale.width, 0);
     ctx.scale(-1, 1);
-
   }
   if (node.src) {
     ctx.drawImage(
@@ -169,7 +158,11 @@ function drawNodeTree(
       } else if (textAlign === "right") {
         x = maxWidth / 2;
       }
-      ctx.fillText(textLine, x + node.scale.width / 2, startY + index * lineHeight + node.scale.height / 2);
+      ctx.fillText(
+        textLine,
+        x + node.scale.width / 2,
+        startY + index * lineHeight + node.scale.height / 2,
+      );
     });
 
     ctx.restore();
@@ -177,7 +170,6 @@ function drawNodeTree(
 
   const stroke = node.stroke ?? 0;
   if (stroke > 0) {
-
   }
 
   if (node.children) {
