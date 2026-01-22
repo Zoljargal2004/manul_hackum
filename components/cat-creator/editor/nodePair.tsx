@@ -19,15 +19,20 @@ export function NumberPair({
     <div className="grid grid-cols-2 gap-3">
       <Input
         type="number"
-        value={a}
+        value={a || ""}
         placeholder={aLabel}
-        onChange={(e) => onAChange(Number(e.target.value))}
+        onChange={(e) => {
+          onAChange(Number(e.target.value));
+        }}
       />
+
       <Input
         type="number"
-        value={b}
+        value={b|| ""}
         placeholder={bLabel}
-        onChange={(e) => onBChange(Number(e.target.value))}
+        onChange={(e) => {
+          onBChange(Number(e.target.value));
+        }}
       />
     </div>
   );

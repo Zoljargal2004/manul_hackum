@@ -68,13 +68,13 @@ export function TransformPanel({
             <FieldLabel>Rotation</FieldLabel>
             <Input
               type="number"
-              value={rotation}
-              onChange={(e) =>
+              value={rotation || ""}
+              onChange={(e) => {
                 updateNode(id, (n: any) => ({
                   ...n,
                   rotation: Number(e.target.value),
-                }))
-              }
+                }));
+              }}
             />
           </div>
 

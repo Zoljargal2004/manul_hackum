@@ -34,7 +34,6 @@ export function TextPanel({
       <Foldable title="Typography">
         <Section>
           <div className="space-y-4">
-
             <div className="space-y-2">
               <FieldLabel>Text color</FieldLabel>
               <div className="flex gap-2 items-center">
@@ -84,8 +83,7 @@ export function TextPanel({
                   onClick={() =>
                     updateNode(node.id, (n: any) => ({
                       ...n,
-                      fontWeight:
-                        n.fontWeight === "bold" ? "normal" : "bold",
+                      fontWeight: n.fontWeight === "bold" ? "normal" : "bold",
                     }))
                   }
                 >
@@ -99,12 +97,14 @@ export function TextPanel({
               <Input
                 type="number"
                 value={node.fontSize || 40}
-                onChange={(e) =>
+                onChange={(e) => {
+                  if (e.target.value == "") return;
+
                   updateNode(node.id, (n: any) => ({
                     ...n,
                     fontSize: Number(e.target.value),
-                  }))
-                }
+                  }));
+                }}
               />
             </div>
 
@@ -158,7 +158,6 @@ export function TextPanel({
                 </Button>
               </div>
             </div>
-
           </div>
         </Section>
       </Foldable>
