@@ -43,7 +43,7 @@ export const NodeSelector = () => {
 };
 
 const NodeCreator = ({ onDone }: { onDone: () => void }) => {
-  const { addNode, selected, nodes, adoptNode } = useNodes();
+  const { addNode, nodes, adoptNode } = useNodes();
 
   const [id, setId] = useState("");
   const [file, setFile] = useState<File | null>(null);

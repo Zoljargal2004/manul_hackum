@@ -54,7 +54,7 @@ export function SelectParent({
 
   
 
-  const parents = getAllNodesNames(nodes).map((id) => ({
+  const parents = getAllNodesNames(nodes).filter(nodeName => nodeName !== "cat").map((id) => ({
     label: id,
     value: id,
   }));

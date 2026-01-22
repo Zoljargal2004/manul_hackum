@@ -7,6 +7,7 @@ import { useState } from "react";
 import { MoveDown, MoveLeft, MoveRight } from "lucide-react";
 import { useNodes } from "../nodeProvider";
 import { searchNode } from "../utils/node/search";
+import { useCatParts } from "../catPartEditProvider";
 
 type EditCatProps = {
   menuOrder: readonly PartKey[];
@@ -57,10 +58,8 @@ export const Foldable = ({
 };
 
 export const EditCat = ({ menuOrder, layers, setLayer }: EditCatProps) => {
-  const { nodes, updateNode } = useNodes();
-  const catNode = searchNode(nodes, "cat");
-  const stroke = catNode?.stroke ?? 0;
-
+  const { selectedCatPart } = useCatParts();
+  console.log(selectedCatPart)
   return (
     <>
       <Card className="p-4 space-y-3">
@@ -69,26 +68,28 @@ export const EditCat = ({ menuOrder, layers, setLayer }: EditCatProps) => {
         </div>
       </Card>
 
-      <Foldable title="Catze">
-        {menuOrder.map((key) => (
-          <div key={key} className="p-4 space-y-3">
-            <div className="flex justify-between items-center">
-              <h3 className="font-bold">{PARTS[key].label}</h3>
-            </div>
+      <Foldable title="Мануул">
+        {menuOrder
+          .filter((key) => key == selectedCatPart)
+          .map((key) => (
+            <div key={key} className="p-4 space-y-3">
+              <div className="flex justify-between items-center">
+                <h3 className="font-bold">{PARTS[key].label}</h3>
+              </div>
 
-            <div className="flex gap-3 flex-wrap">
-              {PARTS[key].options.map((file) => (
-                <Option
-                  key={file}
-                  file={file}
-                  partKey={key}
-                  layers={layers}
-                  setLayer={setLayer}
-                />
-              ))}
+              <div className="flex gap-3 flex-wrap">
+                {PARTS[key].options.map((file) => (
+                  <Option
+                    key={file}
+                    file={file}
+                    partKey={key}
+                    layers={layers}
+                    setLayer={setLayer}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </Foldable>
     </>
   );

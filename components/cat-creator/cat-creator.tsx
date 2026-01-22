@@ -29,6 +29,7 @@ import { NodeSelector } from "./nodeSelector";
 import { NodeProperty } from "./editor/nodeProperties";
 import { useNodes } from "./nodeProvider";
 import { SelectParent } from "./reusables/property-menu-items";
+import { CatContextProvider } from "./catPartEditProvider";
 
 export function CatCreator() {
   const {
@@ -87,119 +88,121 @@ export function CatCreator() {
 
   return (
     <section className="min-h-screen py-16 px-4">
-      <div className=" mx-auto gap-8">
-        <div className="p-6 w-full">
-          <div className="flex gap-3 mb-4">
-            <button
-              onClick={() => {
-                randomize(setLayers);
-              }}
-              className="border px-3 py-2 rounded"
-            >
-              🎲 Random
-            </button>
-            <button
-              onClick={() => {
-                downloadPNG(canvasRef);
-              }}
-              className="border px-3 py-2 rounded"
-            >
-              ⬇ Download
-            </button>
-          </div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div className="relative">
-              <canvas
-                ref={canvasRef}
-                width={800}
-                height={600}
-                className="w-full border rounded block"
-                onMouseDown={(e) =>
-                  mouseDown(
-                    e,
-                    canvasRef,
-                    selectNode,
-                    dragOffset,
-                    nodes,
-                    setDragging,
-                    dragStartNodes,
-                    selected,
-                    resizeHandle,
-                    resizeStart,
-                  )
-                }
-                onMouseMove={(e) => {
-                  if (!dragging && selected && canvasRef.current) {
-                    const pos = getMousePos(e, canvasRef.current);
-                    const handle = getResizeHandle(
+      <div className=" mx-auto gap-8 relative">
+        <CatContextProvider>
+          <div className="p-6 w-full">
+            <div className="flex gap-3 mb-4">
+              <button
+                onClick={() => {
+                  randomize(setLayers);
+                }}
+                className="border px-3 py-2 rounded"
+              >
+                🎲 Random
+              </button>
+              <button
+                onClick={() => {
+                  downloadPNG(canvasRef);
+                }}
+                className="border px-3 py-2 rounded"
+              >
+                ⬇ Download
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              <div className="relative">
+                <canvas
+                  ref={canvasRef}
+                  width={800}
+                  height={600}
+                  className="w-full border rounded block"
+                  onMouseDown={(e) =>
+                    mouseDown(
+                      e,
+                      canvasRef,
+                      selectNode,
+                      dragOffset,
                       nodes,
-                      pos.x,
-                      pos.y,
+                      setDragging,
+                      dragStartNodes,
                       selected,
-                    );
-                    if (handle) {
-                      const cursors: Record<
-                        NonNullable<ResizeHandle>,
-                        string
-                      > = {
-                        se: "se-resize",
-                        s: "s-resize",
-                        e: "e-resize",
-                      };
-                      canvasRef.current.style.cursor =
-                        cursors[handle] || "auto";
-                    } else {
-                      canvasRef.current.style.cursor = "default";
-                    }
+                      resizeHandle,
+                      resizeStart,
+                    )
                   }
+                  onMouseMove={(e) => {
+                    if (!dragging && selected && canvasRef.current) {
+                      const pos = getMousePos(e, canvasRef.current);
+                      const handle = getResizeHandle(
+                        nodes,
+                        pos.x,
+                        pos.y,
+                        selected,
+                      );
+                      if (handle) {
+                        const cursors: Record<
+                          NonNullable<ResizeHandle>,
+                          string
+                        > = {
+                          se: "se-resize",
+                          s: "s-resize",
+                          e: "e-resize",
+                        };
+                        canvasRef.current.style.cursor =
+                          cursors[handle] || "auto";
+                      } else {
+                        canvasRef.current.style.cursor = "default";
+                      }
+                    }
 
-                  mouseMove(
-                    e,
-                    canvasRef,
-                    dragOffset,
-                    dragging,
-                    selected,
-                    updateNodeRaw,
-                    resizeHandle,
-                    resizeStart,
-                  );
-                }}
-                onMouseUp={() => {
-                  mouseUp(
-                    setDragging,
-                    dragStartNodes,
-                    dragging,
-                    updateNode,
-                    selected,
-                    resizeHandle,
-                  );
-                }}
-              />
+                    mouseMove(
+                      e,
+                      canvasRef,
+                      dragOffset,
+                      dragging,
+                      selected,
+                      updateNodeRaw,
+                      resizeHandle,
+                      resizeStart,
+                    );
+                  }}
+                  onMouseUp={() => {
+                    mouseUp(
+                      setDragging,
+                      dragStartNodes,
+                      dragging,
+                      updateNode,
+                      selected,
+                      resizeHandle,
+                    );
+                  }}
+                />
 
-              <canvas
-                ref={overlayRef}
-                width={800}
-                height={600}
-                className="w-full absolute top-0 left-0 pointer-events-none"
-              />
-            </div>
-            <div className="flex flex-col gap-4">
-              <NodeSelector />
-              {selected && (
-                <div className="space-y-4">
-                  <NodeProperty key={"FML"} />
-                  {selected == "cat" && (
-                    <EditCat
-                      menuOrder={menuOrder}
-                      layers={layers}
-                      setLayer={setLayer}
-                    />
-                  )}
-                </div>
-              )}
+                <canvas
+                  ref={overlayRef}
+                  width={800}
+                  height={600}
+                  className="w-full absolute top-0 left-0 pointer-events-none"
+                />
+              </div>
+              <div className="flex flex-col gap-4">
+                <NodeSelector />
+                {selected && (
+                  <div className="space-y-4">
+                    {selected == "cat" && (
+                      <EditCat
+                        menuOrder={menuOrder}
+                        layers={layers}
+                        setLayer={setLayer}
+                      />
+                    )}
+                    <NodeProperty key={"FML"} />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </CatContextProvider>
       </div>
     </section>
   );

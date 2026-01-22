@@ -32,7 +32,7 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   const [nodes, setNodes] = useState<Node[]>([
     {
       id: "cat",
-      position: { x: 100, y: 100 },
+      position: { x: 0, y: 0 },
       scale: { width: 700, height: 650 },
       rotation: 0,
       parent: null,
@@ -117,6 +117,7 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   };
 
   function removeNodeById(nodes: Node[], id: string): Node[] {
+    nodes.forEach(node => {if (node.id === "cat") addNode(node)})
     return nodes
       .filter((n) => n.id !== id)
       .map((n) => ({
