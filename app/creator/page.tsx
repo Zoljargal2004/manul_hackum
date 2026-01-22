@@ -4,9 +4,9 @@ import { NodeManager } from "@/components/cat-creator/nodeProvider";
 import { KeyboardShortcuts } from "@/components/cat-creator/editor/keyboardshortcut";
 
 export const metadata = {
-  title: "Manul",
+  title: "Мануул",
   description:
-    "Create your own shiiiiit",
+    "Өөрийн мануулыг үүсгэх",
 };
 
 export default function CreatorPage() {

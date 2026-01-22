@@ -8,6 +8,7 @@ import { MoveDown, MoveLeft, MoveRight } from "lucide-react";
 import { useNodes } from "../nodeProvider";
 import { searchNode } from "../utils/node/search";
 import { useCatParts } from "../catPartEditProvider";
+import { FieldLabel, Section } from "./nodeProperties";
 
 type EditCatProps = {
   menuOrder: readonly PartKey[];
@@ -18,11 +19,13 @@ type EditCatProps = {
 export const Foldable = ({
   children,
   title,
+  open = false,
 }: Readonly<{
   children: React.ReactNode;
   title: string;
+  open?: boolean;
 }>) => {
-  const [folded, setFolded] = useState(true);
+  const [folded, setFolded] = useState(!open);
 
   return (
     <Card
@@ -59,7 +62,6 @@ export const Foldable = ({
 
 export const EditCat = ({ menuOrder, layers, setLayer }: EditCatProps) => {
   const { selectedCatPart } = useCatParts();
-  console.log(selectedCatPart)
   return (
     <>
       <Card className="p-4 space-y-3">
@@ -68,28 +70,32 @@ export const EditCat = ({ menuOrder, layers, setLayer }: EditCatProps) => {
         </div>
       </Card>
 
-      <Foldable title="Мануул">
-        {menuOrder
-          .filter((key) => key == selectedCatPart)
-          .map((key) => (
-            <div key={key} className="p-4 space-y-3">
-              <div className="flex justify-between items-center">
-                <h3 className="font-bold">{PARTS[key].label}</h3>
-              </div>
+      <Foldable title="Мануул" open={true}>
+        <Section>
+          {menuOrder
+            .filter((key) => key == selectedCatPart)
+            .map((key) => (
+              <div key={key} className="p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <FieldLabel>
+                    {PARTS[key].label}
+                  </FieldLabel>
+                </div>
 
-              <div className="flex gap-3 flex-wrap">
-                {PARTS[key].options.map((file) => (
-                  <Option
-                    key={file}
-                    file={file}
-                    partKey={key}
-                    layers={layers}
-                    setLayer={setLayer}
-                  />
-                ))}
+                <div className="flex gap-3 flex-wrap">
+                  {PARTS[key].options.map((file) => (
+                    <Option
+                      key={file}
+                      file={file}
+                      partKey={key}
+                      layers={layers}
+                      setLayer={setLayer}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </Section>
       </Foldable>
     </>
   );

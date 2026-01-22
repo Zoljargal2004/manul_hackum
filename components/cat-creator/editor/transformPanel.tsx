@@ -8,6 +8,8 @@ import { StrokeControl } from "./strokePanel";
 import { ChildrenList } from "./childrenList";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Node } from "../cat-creator-types";
+import { useNodes } from "../nodeProvider";
+import { searchNode } from "../utils/node/search";
 
 export function TransformPanel({
   node,
@@ -16,6 +18,7 @@ export function TransformPanel({
   moveNode,
 }: any) {
   const { id, position, rotation, scale, stroke, children, flip } = node;
+  const { removeNode, addNode, adoptNode, nodes } = useNodes();
 
   return (
     <Foldable title="Transform">
@@ -97,7 +100,7 @@ export function TransformPanel({
             />
           </div>
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <FieldLabel>Stroke</FieldLabel>
             <StrokeControl
               value={stroke ?? 0}
@@ -105,7 +108,7 @@ export function TransformPanel({
                 updateNode(id, (n: any) => ({ ...n, stroke: v }))
               }
             />
-          </div>
+          </div> */}
 
           <div className="space-y-2">
             <FieldLabel>Children</FieldLabel>
@@ -114,6 +117,43 @@ export function TransformPanel({
               onSelect={selectNode}
             />
           </div>
+          {node.id !== "cat" && (
+            <div className="space-y-2">
+              <FieldLabel>Node</FieldLabel>
+              <div className="flex w-full justify-between">
+                <Button
+                  onClick={() => {
+                    const duplicateNode = (num: number) => {
+                      num = Number(num + 1);
+                      const searchy = searchNode(nodes, `${node.id} ${num}`);
+                      if (!searchy) {
+                        if (!node.parent)
+                          addNode({ ...node, id: `${node.id} ${num}` });
+                        else
+                          adoptNode(node.parent, {
+                            ...node,
+                            id: `${node.id} ${num}`,
+                          });
+                      } else {
+                        duplicateNode(num);
+                      }
+                      return;
+                    };
+                  }}
+                >
+                  Хуулбарлах
+                </Button>
+                <Button
+                  onClick={() => {
+                    removeNode(node.id);
+                  }}
+                  variant={`destructive`}
+                >
+                  Устгах
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </Section>
     </Foldable>

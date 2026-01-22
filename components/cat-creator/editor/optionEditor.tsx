@@ -25,11 +25,11 @@ export const Option = ({ layers, partKey, file, setLayer }: OptionProps) => {
       className={`p-2 border rounded relative overflow-hidden ${partKey === "eyebrows" || partKey === "naruto_beard" || partKey === "stain" ? "bg-white" : ""} `}
     >
       <img src={path} className="w-14 h-14 object-contain" />
-      {
-        active && <div className="absolute flex justify-center items-center inset-0 bg-[#0E121680] z-30">
-          <Check/>
+      {active && (
+        <div className="absolute flex justify-center items-center inset-0 bg-[#0E121680] z-30">
+          <Check />
         </div>
-      }
+      )}
     </button>
   );
 };
