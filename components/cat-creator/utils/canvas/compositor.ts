@@ -49,12 +49,20 @@ async function BuildSpecialHtmlElement(
 
   const { width, height } = node.scale;
 
+  const dpr = window.devicePixelRatio || 1;
+
   const buffer = document.createElement("canvas");
-  buffer.width = width;
-  buffer.height = height;
+  buffer.width = width * dpr;
+  buffer.height = height * dpr;
+  buffer.style.width = width + "px";
+  buffer.style.height = height + "px";
 
   const ctx = buffer.getContext("2d");
   if (!ctx) return;
+
+  ctx.scale(dpr, dpr);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
 
   // base
   const base = await loadImage(BASE_SRC);
