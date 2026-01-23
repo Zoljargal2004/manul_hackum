@@ -92,7 +92,7 @@ export const PARTS: Record<PartKey, PartConfig> = {
   eye: {
     label: "Eyes",
     position: [0.4161, 0.1086, 0.3594, 0.1977],
-    options: ["1.svg"],
+    options: ["1.svg", "2.svg"],
   },
   stain: {
     label: "Stain",

@@ -64,11 +64,12 @@ export const EditCat = ({ menuOrder, layers, setLayer }: EditCatProps) => {
   const { selectedCatPart } = useCatParts();
   return (
     <>
-      <Card className="p-4 space-y-3">
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold">Background</h3>
-        </div>
-      </Card>
+      {/* <Foldable title="Background">
+        <Section>
+          <FieldLabel>Background</FieldLabel>
+          
+        </Section>
+      </Foldable> */}
 
       <Foldable title="Мануул" open={true}>
         <Section>
@@ -77,9 +78,7 @@ export const EditCat = ({ menuOrder, layers, setLayer }: EditCatProps) => {
             .map((key) => (
               <div key={key} className="p-4 space-y-3">
                 <div className="flex justify-between items-center">
-                  <FieldLabel>
-                    {PARTS[key].label}
-                  </FieldLabel>
+                  <FieldLabel>{PARTS[key].label}</FieldLabel>
                 </div>
 
                 <div className="flex gap-3 flex-wrap">

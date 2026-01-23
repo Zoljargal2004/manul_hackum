@@ -106,7 +106,7 @@ export function CatCreator() {
                 }}
                 className="border px-3 py-2 rounded"
               >
-                ⬇ Download
+                ⬇ Зураг татах
               </button>
             </div>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">

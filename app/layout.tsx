@@ -13,10 +13,9 @@ export const metadata: Metadata = {
   description: "Төв Азийн зэрлэг муур",
   icons: {
     icon: {
-      url: "/hackum-symbol.png",
-    },
-    apple: "/hackum-symbol.png",
-  },
+      url: "/hackum-symbol.png"
+    }
+  }
 };
 
 export default function RootLayout({
