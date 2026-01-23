@@ -29,22 +29,13 @@ import { NodeSelector } from "./nodeSelector";
 import { NodeProperty } from "./editor/nodeProperties";
 import { useNodes } from "./nodeProvider";
 import { SelectParent } from "./reusables/property-menu-items";
-import { CatContextProvider } from "./catPartEditProvider";
+import { CatContextProvider, useCatParts } from "./catPartEditProvider";
 
 export function CatCreator() {
-  const {
-    selectedNode,
-    nodes,
-    selected,
-    selectNode,
-    updateNode,
-    updateNodeRaw,
-    updateCat,
-  } = useNodes();
+  const { setLayers } = useCatParts();
+  const { nodes, selected, selectNode, updateNode, updateNodeRaw } = useNodes();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [layers, setLayers] = useState<Layers>(
-    selectedNode?.layers || buildInitialLayers(),
-  );
+
   const bufferRef = useRef<HTMLCanvasElement | null>(null);
   const overlayRef = useRef<HTMLCanvasElement | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -63,33 +54,20 @@ export function CatCreator() {
   useEffect(() => {
     bufferRef.current = createBufferCanvas(1400, 1300);
   }, []);
-  useEffect(() => {
-    updateCat(layers);
-  }, [layers]);
-
-  const menuOrder = useMemo(() => DRAW_ORDER, []);
 
   useEffect(() => {
     if (!dragging)
       composeCanvas(canvasRef.current!, bufferRef.current!, nodes, updateNode);
-  }, [layers, nodes, dragging]);
-
-  useEffect(() => {
-    DrawSpecials(nodes, updateNode);
-  }, [layers]);
+  }, [nodes, dragging]);
 
   useEffect(() => {
     if (!overlayRef.current) return;
     drawRetriangle(overlayRef.current, nodes, selected);
   }, [nodes, selected]);
 
-  const setLayer = (key: PartKey, value: string | null) =>
-    setLayers((p) => ({ ...p, [key]: value }));
-
   return (
     <section className="min-h-screen py-16 px-4">
       <div className=" mx-auto gap-8 relative">
-        <CatContextProvider>
           <div className="p-6 w-full">
             <div className="flex gap-3 mb-4">
               <button
@@ -189,20 +167,19 @@ export function CatCreator() {
                 <NodeSelector />
                 {selected && (
                   <div className="space-y-4">
-                    {selected == "cat" && (
+                    {/* {selected == "cat" && (
                       <EditCat
                         menuOrder={menuOrder}
                         layers={layers}
                         setLayer={setLayer}
                       />
-                    )}
+                    )} */}
                     <NodeProperty key={"FML"} />
                   </div>
                 )}
               </div>
             </div>
           </div>
-        </CatContextProvider>
       </div>
     </section>
   );

@@ -1,36 +1,5 @@
-import { useState } from "react";
-import { Foldable } from "./editCat";
 import { useNodes } from "../nodeProvider";
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { searchNode } from "../utils/node/search";
-import { NodeOrderEditor } from "../reusables/property-menu-items";
-import {
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  Bold,
-  ChevronsUpDownIcon,
-  CheckIcon,
-} from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Label } from "@radix-ui/react-label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { NodeIdPanel } from "./nodeIdPanel";
+import { searchNode } from "../utils/node/search";import { NodeIdPanel } from "./nodeIdPanel";
 import { TextPanel } from "./textpanel";
 import { TransformPanel } from "./transformPanel";
 
@@ -54,8 +23,6 @@ export const NodeProperty = () => {
     </div>
   );
 };
-
-
 
 export function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
