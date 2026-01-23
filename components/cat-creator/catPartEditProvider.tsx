@@ -28,7 +28,7 @@ const PartSelector = ({
   selectPart: (partke: PartKey) => void;
 }) => {
   return (
-    <div className="fixed bottom-2 flex justify-center-safe z-50 w-[90%] gap-4 overflow-x-scroll  [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className="fixed bottom-2 flex justify-center-safe z-50 w-full inset-x-auto gap-4 overflow-x-scroll  [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       {DRAW_ORDER.map((part) => (
         <Button
           onClick={() => selectPart(part)}

@@ -8,7 +8,7 @@ export function CreateCatSection() {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col items-center text-center space-y-8">
           <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-balance">Өөрийн манул персона үүсгэх</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-balance">Өөрийн мануул персона үүсгэх</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               
             </p>

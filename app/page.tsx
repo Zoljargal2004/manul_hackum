@@ -9,7 +9,6 @@ import { Company } from "@/components/company";
 export default function Page() {
   return (
     <div className="min-h-screen">
-      <Navigation />
       <Hero />
       <About />
       <Company />
