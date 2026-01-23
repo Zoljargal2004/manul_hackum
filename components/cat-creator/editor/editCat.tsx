@@ -78,12 +78,14 @@ export const EditCat = ({
         )}
       >
         <Button
-          className="absolute right-4 flex justify-center items-center top-4"
+          type="button"
           onClick={() => setOpen(false)}
           variant={`ghost`}
+          className="absolute right-4 top-4 flex items-center justify-center"
         >
           <X />
         </Button>
+
         {menuOrder
           .filter((key) => key == selectedCatPart)
           .map((key) => (
