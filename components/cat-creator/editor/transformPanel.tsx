@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Node } from "../cat-creator-types";
 import { useNodes } from "../nodeProvider";
 import { searchNode } from "../utils/node/search";
+import { UseTopPanel } from "../top-panel-provider";
 
 export function TransformPanel({
   node,
@@ -18,10 +19,16 @@ export function TransformPanel({
   moveNode,
 }: any) {
   const { id, position, rotation, scale, children, flip } = node;
+  const { setOpen, open } = UseTopPanel();
   const { removeNode, addNode, adoptNode, nodes } = useNodes();
 
   return (
-    <Foldable title="Transform"
+    <Foldable
+      title="Transform"
+      onClick={() =>
+        setOpen((prev) => (prev === "Transform" ? null : "Transform"))
+      }
+      open={open === "Transform"}
     >
       <Section>
         <div className="space-y-5">

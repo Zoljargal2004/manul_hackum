@@ -4,6 +4,7 @@ import { Bold, AlignLeft, AlignCenter, AlignRight } from "lucide-react";
 import { Foldable } from "./editCat";
 import { FieldLabel, Section } from "./nodeProperties";
 import { FontSelect } from "./fontSelect";
+import { UseTopPanel } from "../top-panel-provider";
 
 export function TextPanel({
   node,
@@ -13,10 +14,15 @@ export function TextPanel({
   updateNode: any;
 }) {
   if (node.text === undefined) return null;
+  const { setOpen, open } = UseTopPanel();
 
   return (
     <>
-      <Foldable title="Text">
+      <Foldable
+        title="Text"
+        onClick={() => setOpen((prev) => (prev === "Text" ? null : "Text"))}
+        open={open === "Text"}
+      >
         <Section>
           <div className="space-y-4">
             <div className="space-y-2">

@@ -4,6 +4,7 @@ import { searchNode } from "../utils/node/search";
 import { NodeIdPanel } from "./nodeIdPanel";
 import { TextPanel } from "./textpanel";
 import { TransformPanel } from "./transformPanel";
+import { UseTopPanel } from "../top-panel-provider";
 
 export const NodeProperty = () => {
   const { nodes, selected, updateNode, selectNode, moveNode } = useNodes();
@@ -12,7 +13,7 @@ export const NodeProperty = () => {
   if (!node) return;
   return (
     <>
-      <NodeIdPanel id={node.id} updateNode={updateNode} />
+      <NodeIdPanel id={node.id} updateNode={updateNode}/>
 
       <TransformPanel
         node={node}
@@ -20,7 +21,7 @@ export const NodeProperty = () => {
         selectNode={selectNode}
         moveNode={moveNode}
       />
-      
+
       <TextPanel node={node} updateNode={updateNode} />
     </>
   );

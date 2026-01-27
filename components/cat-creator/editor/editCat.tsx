@@ -25,26 +25,28 @@ type EditCatProps = {
 export const Foldable = ({
   children,
   title,
+  open = false,
+  onClick,
 }: Readonly<{
   children: React.ReactNode;
   title: string;
+  open?: boolean;
+  onClick: () => void;
 }>) => {
   return (
-    <DropdownMenu modal={false}>
-      <DropdownMenuTrigger className="focus-visible:outline-none">
-        <Card
-          className={`px-3 py-2 transition-all duration-300 flex flex-col`}
-        >
-          <span className={`font-semibold`}>
-            {title}
-          </span>
+    <div>
+      <div className="focus-visible:outline-none" onClick={onClick}>
+        <Card className={`px-3 py-2 transition-all duration-300 flex flex-col cursor-pointer ${open && "border-primary"}`}>
+          <span className={`font-semibold`}>{title}</span>
         </Card>
-      </DropdownMenuTrigger>
+      </div>
 
-      <DropdownMenuContent className="w-full z-50 mt-4">
+      <div
+        className={`top-16 inset-x-4 md:inset-x-auto z-50 mt-4 absolute ${!open ? "hidden" : ""}`}
+      >
         {children}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </div>
+    </div>
   );
 };
 

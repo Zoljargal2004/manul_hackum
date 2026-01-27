@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Foldable } from "./editCat";
 import { FieldLabel, Section } from "./nodeProperties";
+import { UseTopPanel } from "../top-panel-provider";
 
 export function NodeIdPanel({
   id,
@@ -10,11 +11,17 @@ export function NodeIdPanel({
   id: string;
   updateNode: any;
 }) {
+  const { open, setOpen } = UseTopPanel();
+
   const [newId, setNewId] = useState(id);
   useEffect(() => setNewId(id), [id]);
 
   return (
-    <Foldable title="ID">
+    <Foldable
+      title="ID"
+      open={open === "ID"}
+      onClick={() => setOpen((prev) => (prev === "ID" ? null : "ID"))}
+    >
       <Section>
         <div className="space-y-2">
           <FieldLabel>Node ID</FieldLabel>
