@@ -20,7 +20,6 @@ export default function CreatorPage() {
         <CatContextProvider>
           <div>
             <Navigation />
-            <div className="text-4xl mt-20 text-center">Персона үүсгэх</div>
             <CatCreator />
           </div>
         </CatContextProvider>

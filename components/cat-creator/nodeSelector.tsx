@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -41,8 +41,8 @@ export const NodeSelector = () => {
 
 const NodeCreator = ({ onDone }: { onDone: () => void }) => {
   const { addNode, nodes, adoptNode } = useNodes();
-
-  const [id, setId] = useState("");
+  const new_node_num = useRef(1)
+  const [id, setId] = useState(`Node ${new_node_num.current}`);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [nodeType, setNodeType] = useState<"image" | "text">("image");
@@ -117,6 +117,7 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
       } else {
         addNode(new_node);
       }
+      new_node_num.current ++;
     }
 
     setId("");

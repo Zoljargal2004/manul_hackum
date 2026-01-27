@@ -32,8 +32,8 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
   const [nodes, setNodes] = useState<Node[]>([
     {
       id: "cat",
-      position: { x: 0, y: 0 },
-      scale: { width: 700, height: 650 },
+      position: { x: 175, y: 162.5 },
+      scale: { width: 350, height: 325 },
       rotation: 0,
       parent: null,
       stroke: 0,
