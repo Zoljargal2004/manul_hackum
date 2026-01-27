@@ -36,16 +36,24 @@ export function Navigation() {
             <div className="text-xl font-bold text-foreground">{"Мануул"}</div>
           </a>
           <div className="hidden lg:flex items-center gap-8">
-            <NavElements />
+            {navElements.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
           </div>
           <div className={`lg:hidden`}>
-            <Sheet open={open} onOpenChange={() =>setOpen(!open)}>
+            <Sheet open={open} onOpenChange={() => setOpen(!open)}>
               <SheetTrigger asChild onClick={() => setOpen(true)}>
                 <Button variant="outline">
                   <Menu />
                 </Button>
               </SheetTrigger>
-              <SheetContent  className={` "w-0"}`}>
+              <SheetContent className={` "w-0"}`}>
                 <SheetHeader>
                   <SheetTitle></SheetTitle>
                   <SheetDescription>
@@ -54,7 +62,7 @@ export function Navigation() {
                         <a
                           key={item.href}
                           href={item.href}
-                          onClick={()=> setOpen(false)}
+                          onClick={() => setOpen(false)}
                           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                         >
                           {item.label}
