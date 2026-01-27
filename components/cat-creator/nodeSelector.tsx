@@ -30,14 +30,11 @@ export const NodeSelector = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex gap-2 flex-wrap">
-        <NodeNav />
-        <DialogTrigger className="rounded-xl border px-3 hover:bg-slate-800">
-          +
-        </DialogTrigger>
+      <DialogTrigger className="rounded-xl aspect-square h-full border px-3 hover:bg-slate-800">
+        +
+      </DialogTrigger>
 
-        <NodeCreator onDone={() => setOpen(false)} />
-      </div>
+      <NodeCreator onDone={() => setOpen(false)} />
     </Dialog>
   );
 };

@@ -56,7 +56,7 @@ const PartSelector = ({
   layers: Layers;
   setLayers: Dispatch<SetStateAction<Layers>>;
 }) => {
-  const { updateCat, nodes, updateNode } = useNodes();
+  const { updateCat, nodes, updateNode, selected } = useNodes();
 
   const [open, setOpen] = useState(true);
   const menuOrder = useMemo(() => DRAW_ORDER, []);
@@ -70,6 +70,7 @@ const PartSelector = ({
 
   const setLayer = (key: PartKey, value: string | null) =>
     setLayers((p) => ({ ...p, [key]: value }));
+  if(selected !== "cat") return
   return (
     <div className="fixed bottom-2 w-full z-50 flex flex-col gap-2">
       <div className="flex justify-center-safe w-full inset-x-auto gap-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">

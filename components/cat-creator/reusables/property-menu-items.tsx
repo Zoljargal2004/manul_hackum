@@ -109,11 +109,11 @@ export function SelectParent({
 export const NodeNav = () => {
   const { nodes } = useNodes();
   return (
-    <div>
+    <>
       {getAllNodesNames(nodes).map((node) => (
         <NodeButon key={node} node={node} />
       ))}
-    </div>
+    </>
   );
 };
 

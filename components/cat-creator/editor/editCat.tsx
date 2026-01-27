@@ -7,6 +7,11 @@ import { MoveRight, X } from "lucide-react";
 
 import { FieldLabel } from "./nodeProperties";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
 
 type EditCatProps = {
   menuOrder: readonly PartKey[];
@@ -20,44 +25,26 @@ type EditCatProps = {
 export const Foldable = ({
   children,
   title,
-  open = false,
 }: Readonly<{
   children: React.ReactNode;
   title: string;
-  open?: boolean;
 }>) => {
-  const [folded, setFolded] = useState(!open);
-
   return (
-    <Card
-      className={`px-8 py-4 transition-all duration-300 flex flex-col ${
-        folded ? "gap-0" : "gap-4"
-      }`}
-    >
-      <button
-        onClick={() => setFolded((p) => !p)}
-        className="flex w-full justify-between items-center"
-      >
-        <span className="font-semibold">{title}</span>
-        {
-          <MoveRight
-            className={cn(
-              "transition-all duration-300 stroke-1",
-              folded ? `rotate-0` : "rotate-90",
-            )}
-          />
-        }
-      </button>
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger className="focus-visible:outline-none">
+        <Card
+          className={`px-3 py-2 transition-all duration-300 flex flex-col`}
+        >
+          <span className={`font-semibold`}>
+            {title}
+          </span>
+        </Card>
+      </DropdownMenuTrigger>
 
-      <div
-        className={cn(
-          "transition-all duration-300 overflow-hidden",
-          folded ? "max-h-0 opacity-0 pointer-events-none" : " opacity-100",
-        )}
-      >
-        <div className="pt-3">{children}</div>
-      </div>
-    </Card>
+      <DropdownMenuContent className="w-full z-50 mt-4">
+        {children}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

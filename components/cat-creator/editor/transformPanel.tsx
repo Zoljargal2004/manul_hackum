@@ -17,11 +17,12 @@ export function TransformPanel({
   selectNode,
   moveNode,
 }: any) {
-  const { id, position, rotation, scale, stroke, children, flip } = node;
+  const { id, position, rotation, scale, children, flip } = node;
   const { removeNode, addNode, adoptNode, nodes } = useNodes();
 
   return (
-    <Foldable title="Transform">
+    <Foldable title="Transform"
+    >
       <Section>
         <div className="space-y-5">
           <div className="grid grid-cols-2 gap-3">

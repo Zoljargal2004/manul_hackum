@@ -18,21 +18,6 @@ export function TextPanel({
     <>
       <Foldable title="Text">
         <Section>
-          <Input
-            value={node.text || ""}
-            placeholder="Enter text..."
-            onChange={(e) =>
-              updateNode(node.id, (n: any) => ({
-                ...n,
-                text: e.target.value,
-              }))
-            }
-          />
-        </Section>
-      </Foldable>
-
-      <Foldable title="Typography">
-        <Section>
           <div className="space-y-4">
             <div className="space-y-2">
               <FieldLabel>Text color</FieldLabel>
@@ -157,6 +142,21 @@ export function TextPanel({
                   <AlignRight size={16} />
                 </Button>
               </div>
+            </div>
+            <div className="space-y-2">
+              <FieldLabel>Text</FieldLabel>
+
+              <Input
+                type=""
+                value={node.text || ""}
+                placeholder="Enter text..."
+                onChange={(e) =>
+                  updateNode(node.id, (n: any) => ({
+                    ...n,
+                    text: e.target.value,
+                  }))
+                }
+              />
             </div>
           </div>
         </Section>
