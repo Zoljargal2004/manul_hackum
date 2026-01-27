@@ -15,6 +15,8 @@ import { EditCat } from "./editor/editCat";
 import { buildInitialLayers } from "./utils/layer/initial";
 import { useNodes } from "./nodeProvider";
 import { DrawSpecials } from "./utils/canvas/compositor";
+import { Option } from "./editor/optionEditor";
+import { FieldLabel } from "./editor/nodeProperties";
 
 const CatContext = createContext<{
   setLayers: Dispatch<SetStateAction<Layers>>;
@@ -70,33 +72,76 @@ const PartSelector = ({
 
   const setLayer = (key: PartKey, value: string | null) =>
     setLayers((p) => ({ ...p, [key]: value }));
-  if(selected !== "cat") return
+  if (selected !== "cat") return;
   return (
-    <div className="fixed bottom-2 w-full z-50 flex flex-col gap-2">
-      <div className="flex justify-center-safe w-full inset-x-auto gap-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {DRAW_ORDER.map((part) => (
-          <Button
-            onClick={() => {
-              selectPart(part);
-              setOpen(true);
-            }}
-            //   variant={"ghost"}
-            key={`side` + part}
-          >
-            {PARTS[part].label}
-          </Button>
-        ))}
+    <>
+      <div className="hidden   lg:flex fixed left-4 z-50 h-full items-center">
+        <div className="h-80% bg-card flex flex-col gap-4 rounded-xl border shadow-sm py-4 px-2">
+          {DRAW_ORDER.map((part) => (
+            <Button
+              onClick={() => {
+                selectPart(part);
+                setOpen(true);
+              }}
+              variant={"ghost"}
+              className={`border ${part === selectedCatPart && "border-accent"}`}
+              key={`side` + part}
+            >
+              {PARTS[part].label}
+            </Button>
+          ))}
+        </div>
       </div>
-      <EditCat
-        selectedCatPart={selectedCatPart}
-        layers={layers}
-        menuOrder={menuOrder}
-        setLayer={setLayer}
-        open={open}
-        setOpen={setOpen}
-        key={"edit cat"}
-      />
-    </div>
+      <div className="hidden  lg:flex fixed right-4 z-50 h-full items-center">
+        <div className="h-[80%] bg-card  flex flex-col gap-4 rounded-xl border shadow-sm">
+          {menuOrder
+            .filter((key) => key == selectedCatPart)
+            .map((key) => (
+              <div key={key} className="p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <FieldLabel>{PARTS[key].label}</FieldLabel>
+                </div>
+
+                <div className="flex gap-3 flex-wrap flex-col overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  {PARTS[key].options.map((file) => (
+                    <Option
+                      key={file}
+                      file={file}
+                      partKey={key}
+                      layers={layers}
+                      setLayer={setLayer}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+      <div className="lg:hidden fixed bottom-2 w-full z-50 flex flex-col gap-2">
+        <div className="flex  justify-center-safe w-full inset-x-auto gap-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {DRAW_ORDER.map((part) => (
+            <Button
+              onClick={() => {
+                selectPart(part);
+                setOpen(true);
+              }}
+              key={`side` + part}
+            >
+              {PARTS[part].label}
+            </Button>
+          ))}
+        </div>
+        <EditCat
+          selectedCatPart={selectedCatPart}
+          layers={layers}
+          menuOrder={menuOrder}
+          setLayer={setLayer}
+          open={open}
+          setOpen={setOpen}
+          key={"edit cat"}
+        />
+      </div>
+    </>
   );
 };
 
