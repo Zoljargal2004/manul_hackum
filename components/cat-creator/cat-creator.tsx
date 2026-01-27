@@ -59,8 +59,8 @@ export function CatCreator() {
       
       <div className=" mx-auto gap-8">
         <div className="p-6 w-full relative">
-          <div className="flex  whitespace-nowrap items-center gap-3 mb-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-              <span className="text-2xl">Персона үүсгэх</span>
+          <div className="flex justify-center  whitespace-nowrap items-center gap-3 mb-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              {/* <span className="text-2xl">Персона үүсгэх</span> */}
               <button
                 onClick={() => {
                   randomize(setLayers);
