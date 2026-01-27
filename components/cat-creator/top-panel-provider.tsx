@@ -1,8 +1,9 @@
+"use client"
+
 import {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { useNodes } from "./nodeProvider";
@@ -30,7 +31,7 @@ export const TopPanelContextProvider = ({
     <TopPanelContext.Provider
       value={{ open: openPanel, setOpen: setOpenPanel }}
     >
-      {openPanel && <div className="w-[100vh] h-screen absolute z-30" onClick={() => setOpenPanel(null)} />}
+      {openPanel && <div className="w-full h-screen absolute z-10 " onClick={() => setOpenPanel(null)} />}
 
       {children}
     </TopPanelContext.Provider>

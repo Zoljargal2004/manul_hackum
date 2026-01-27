@@ -3,6 +3,7 @@ import { CatCreator } from "@/components/cat-creator/cat-creator";
 import { NodeManager } from "@/components/cat-creator/nodeProvider";
 import { KeyboardShortcuts } from "@/components/cat-creator/editor/keyboardshortcut";
 import { CatContextProvider } from "@/components/cat-creator/catPartEditProvider";
+import { TopPanelContextProvider } from "@/components/cat-creator/top-panel-provider";
 
 export const metadata = {
   title: "Мануул",
@@ -11,8 +12,10 @@ export const metadata = {
 
 export default function CreatorPage() {
   return (
-    <div className="min-h-screen">
+    <div className="">
       <NodeManager>
+        <TopPanelContextProvider>
+
         <KeyboardShortcuts />
         <CatContextProvider>
           <div>
@@ -21,6 +24,7 @@ export default function CreatorPage() {
             <CatCreator />
           </div>
         </CatContextProvider>
+        </TopPanelContextProvider>
       </NodeManager>
     </div>
   );

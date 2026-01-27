@@ -19,7 +19,6 @@ import { NodeProperty } from "./editor/nodeProperties";
 import { useNodes } from "./nodeProvider";
 import { NodeNav } from "./reusables/property-menu-items";
 import { useCatParts } from "./catPartEditProvider";
-import { TopPanelContextProvider } from "./top-panel-provider";
 
 export function CatCreator() {
   const { setLayers } = useCatParts();
@@ -56,11 +55,11 @@ export function CatCreator() {
   }, [nodes, selected]);
 
   return (
-    <section className="min-h-screen py-16 px-4">
-      <div className=" mx-auto gap-8 relative">
-        <div className="p-6 w-full">
-          <div className="flex whitespace-nowrap items-center gap-3 mb-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            <TopPanelContextProvider>
+    <section className="py-16 px-4 overflow-hidden">
+      
+      <div className=" mx-auto gap-8">
+        <div className="p-6 w-full relative">
+          <div className="flex  whitespace-nowrap items-center gap-3 mb-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               <button
                 onClick={() => {
                   randomize(setLayers);
@@ -81,15 +80,14 @@ export function CatCreator() {
               <NodeNav />
 
               <NodeSelector />
-            </TopPanelContextProvider>
           </div>
           <div className="  flex justify-center gap-8 ">
-            <div className="w-[90%] md:w-[40%] relative">
+            <div className="w-[90%] md:w-[60%] lg:w-[40%] relative bg-card rounded-2xl border-0">
               <canvas
                 ref={canvasRef}
                 width={700}
                 height={650}
-                className="w-full border rounded block"
+                className="w-full rounded block"
                 onMouseDown={(e) =>
                   mouseDown(
                     e,
