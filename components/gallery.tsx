@@ -28,7 +28,7 @@ const GalleryFrame = ({ img }: { img: string }) => {
     <div className="bg-muted/30 rounded-2xl">
       <div className="relative h-80 rounded-lg overflow-hidden group">
         <img
-          src={`/gallery/${img}.png`}
+          src={`https://raw.githubusercontent.com/Zoljargal2004/manul_hackum/refs/heads/main/public/gallery/${img}.png`}
           alt="manul"
           className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
         />
