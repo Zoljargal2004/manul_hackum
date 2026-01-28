@@ -70,13 +70,13 @@ export const PARTS: Record<PartKey, PartConfig> = {
   },
   fang: {
     label: "Fang",
-    position: [0.5759, 0.2948, 0.0897, 0.0433],
-    options: ["1.svg", "2.svg", "3.svg"],
+    position: [0.5759, 0.2948, 0.0897, 0.0866],
+    options: ["1.png", "2.png", "3.png", "4.png"],
   },
   nose: {
     label: "Nose",
     position: [0.5336, 0.2383, 0.1598, 0.1024],
-    options: ["1.svg"],
+    options: ["1.svg", "2.png", "3.png"],
   },
   naruto_beard: {
     label: "Naruto Beard",
@@ -92,7 +92,7 @@ export const PARTS: Record<PartKey, PartConfig> = {
   eye: {
     label: "Eyes",
     position: [0.4161, 0.1086, 0.3594, 0.1977],
-    options: ["1.svg", "2.svg"],
+    options: ["1.svg", "2.svg", "3.png", "4.png"],
   },
   stain: {
     label: "Stain",

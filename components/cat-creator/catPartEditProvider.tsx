@@ -75,7 +75,7 @@ const PartSelector = ({
   if (selected !== "cat") return;
   return (
     <>
-      <div className="hidden   lg:flex fixed left-4 z-50 h-full items-center">
+      <div className="hidden   lg:flex fixed left-8 z-50 h-full items-center">
         <div className="h-80% bg-card flex flex-col gap-4 rounded-xl border shadow-sm py-4 px-2">
           {DRAW_ORDER.map((part) => (
             <Button
@@ -92,7 +92,7 @@ const PartSelector = ({
           ))}
         </div>
       </div>
-      <div className="hidden  lg:flex fixed right-4 z-50 h-full items-center">
+      <div className="hidden  lg:flex fixed right-8 z-50 h-full items-center">
         <div className="h-[80%] bg-card  flex flex-col gap-4 rounded-xl border shadow-sm">
           {menuOrder
             .filter((key) => key == selectedCatPart)
