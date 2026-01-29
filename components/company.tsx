@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { LinkButton } from "./generic/LinkButton";
 
 export function Company() {
   const partners = ["and", "itpark", "mandal", "ms"];
@@ -18,11 +19,8 @@ export function Company() {
                 тавьсан дэвшилтэт технологийн шийдлүүдийг хүргэхэд зориулагдан
                 ажилладаг.
               </p>
-              <Button>
-                <Link target="_blank" href="https://hackum.com">
-                  Холбогдох
-                </Link>
-              </Button>
+
+              <LinkButton link="https://hackum.com">Холбогдох</LinkButton>
             </div>
             <div className="relative overflow-hidden min-w-[20%]">
               <img src="/logo_cat.png" alt="catie" className="w-full h-full" />

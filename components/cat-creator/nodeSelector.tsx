@@ -41,7 +41,7 @@ export const NodeSelector = () => {
 
 const NodeCreator = ({ onDone }: { onDone: () => void }) => {
   const { addNode, nodes, adoptNode } = useNodes();
-  const new_node_num = useRef(1)
+  const new_node_num = useRef(1);
   const [id, setId] = useState(`Node ${new_node_num.current}`);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -117,10 +117,10 @@ const NodeCreator = ({ onDone }: { onDone: () => void }) => {
       } else {
         addNode(new_node);
       }
-      new_node_num.current ++;
+      new_node_num.current++;
+      setId(`Node ${new_node_num.current}`);
     }
 
-    setId("");
     setFile(null);
     setText("");
     setScale({ width: 200, height: 50 });
