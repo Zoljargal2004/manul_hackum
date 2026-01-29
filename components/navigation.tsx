@@ -27,7 +27,7 @@ export function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 ${!scrollY ? "bg-background/80" : "bg-background"} trasition-call duration-300 backdrop-blur-sm border-b border-border`}
+      className={`fixed top-0 left-0 right-0 z-50 ${!scrollY ? "bg-transparent border-0" : "bg-background"} trasition-call duration-300 backdrop-blur-sm `}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
@@ -79,10 +79,6 @@ export function Navigation() {
     </nav>
   );
 }
-
-const NavElements = () => {
-  return <></>;
-};
 
 const navElements = [
   { href: "/#about", label: "Тухай" },
