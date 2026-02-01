@@ -29,7 +29,7 @@ export const CatContextProvider = ({
 }) => {
   const { selectedNode } = useNodes();
 
-  const [selectedCatPart, setSelectedCatpart] = useState<PartKey>("fang");
+  const [selectedCatPart, setSelectedCatpart] = useState<PartKey>("cloth");
   const [layers, setLayers] = useState<Layers>(
     selectedNode?.layers || buildInitialLayers(),
   );
