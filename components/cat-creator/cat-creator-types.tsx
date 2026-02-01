@@ -2,12 +2,11 @@ export type PartKey =
   // | "eyebrows"
   // | "mouth"
   // | "fang"
-  // | "nose"
+  | "nose"
   // | "naruto_beard"
   // | "beard"
   | "cloth"
   | "eye"
-  // | "stain";
 
 export type PartConfig = {
   label: string;
@@ -49,12 +48,11 @@ export const DRAW_ORDER: readonly PartKey[] = [
   // "eyebrows",
   // "mouth",
   // "fang",
-  // "nose",
+  "nose",
   // "naruto_beard",
   // "beard",
   "eye",
-  "cloth"
-  // "stain",
+  "cloth",
 ];
 
 export const ARTBOARD = { w: 1327, h: 1133 };
@@ -75,11 +73,11 @@ export const PARTS: Record<PartKey, PartConfig> = {
   //   position: [0.5759, 0.2948, 0.0897, 0.0866],
   //   options: ["1.png", "2.png", "3.png", "4.png"],
   // },
-  // nose: {
-  //   label: "Nose",
-  //   position: [0.5336, 0.2383, 0.1598, 0.1024],
-  //   options: ["1.svg", "2.png", "3.png"],
-  // },
+  nose: {
+    label: "Muzzle",
+    position: [0.42, 0.25, 0.1598, 0.16],
+    options: ["1.png", "2.png", "3.png", "4.png", "5.png"],
+  },
   // naruto_beard: {
   //   label: "Naruto Beard",
   //   position: [0.3068, 0.1942, 0.5872, 0.2233],
@@ -101,11 +99,7 @@ export const PARTS: Record<PartKey, PartConfig> = {
     position: [0, 0, 1, 1],
     options: ["1.png", "2.png"],
   },
-  // stain: {
-  //   label: "Stain",
-  //   position: [0.5389, 0.0856, 1, 1],
-  //   options: ["1.svg"],
-  // },
+
 };
 
 export const BASE_SRC = "/create-cat/base/base.png";
