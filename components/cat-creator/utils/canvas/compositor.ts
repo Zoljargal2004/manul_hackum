@@ -49,43 +49,50 @@ async function BuildSpecialHtmlElement(
 
   const { width, height } = node.scale;
 
-const dpr = window.devicePixelRatio || 1;
+  let extra = 50;
 
-const buffer = document.createElement("canvas");
-buffer.width = width * dpr;
-buffer.height = height * dpr;
-buffer.style.width = width + "px";
-buffer.style.height = height + "px";
+  const dpr = window.devicePixelRatio || 1;
 
-const ctx = buffer.getContext("2d");
-if (!ctx) return;
+  const buffer = document.createElement("canvas");
+  buffer.width = width * dpr;
+  buffer.height = height * dpr + extra;
+  buffer.style.width = width + "px";
+  buffer.style.height = height + "px";
 
-ctx.scale(dpr, dpr);
-ctx.imageSmoothingEnabled = true;
-ctx.imageSmoothingQuality = "high";
+  const ctx = buffer.getContext("2d");
+  if (!ctx) return;
 
-// base
-const base = await loadImage(BASE_SRC);
-ctx.drawImage(base, 0, 0, width, height);
+  ctx.scale(dpr, dpr);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
 
-// parts
-for (const key of DRAW_ORDER) {
-  const src = node.layers[key as PartKey];
-  if (!src) continue;
+  // base
+  const base = await loadImage(BASE_SRC);
+  ctx.drawImage(base, 0, extra, width, height);
 
-  const part = await loadImage(src);
-  const [rx, ry, rw, rh] = PARTS[key].position;
+  // parts
+  for (const key of DRAW_ORDER) {
+    const src = node.layers[key as PartKey];
+    if (!src) continue;
 
-  ctx.drawImage(part, rx * width, ry * height, rw * width, rh * height);
-}
+    const part = await loadImage(src);
+    const [rx, ry, rw, rh] = PARTS[key].position;
 
-const img = await loadImage(buffer.toDataURL());
+    ctx.drawImage(
+      part,
+      rx * width,
+      ry * height + extra,
+      rw * width,
+      rh * height,
+    );
+  }
 
-updateNode(node.id, (prev) => ({
-  ...prev,
-  src: img,
-}));
+  const img = await loadImage(buffer.toDataURL());
 
+  updateNode(node.id, (prev) => ({
+    ...prev,
+    src: img,
+  }));
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {

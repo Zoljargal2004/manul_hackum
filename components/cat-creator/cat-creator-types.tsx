@@ -4,9 +4,9 @@ export type PartKey =
   // | "fang"
   | "nose"
   // | "naruto_beard"
-  // | "beard"
+  | "hat"
   | "cloth"
-  | "eye"
+  | "eye";
 
 export type PartConfig = {
   label: string;
@@ -25,21 +25,21 @@ export type Node = {
     width: number;
     height: number;
   };
-  special?: boolean
-  flip?: boolean
+  special?: boolean;
+  flip?: boolean;
   rotation: number;
   children?: Node[];
   parent: string | null;
   text?: string;
   stroke?: number;
   textColor?: string;
-  fontSize? : number;
+  fontSize?: number;
   fontFamily?: string;
   fontWeight?: string;
   textAlign?: "left" | "center" | "right";
 
   src?: HTMLImageElement;
-  layers? : Layers
+  layers?: Layers;
 };
 
 export type Layers = Record<PartKey, string | null>;
@@ -49,10 +49,9 @@ export const DRAW_ORDER: readonly PartKey[] = [
   // "mouth",
   // "fang",
   "nose",
-  // "naruto_beard",
-  // "beard",
   "eye",
   "cloth",
+  "hat",
 ];
 
 export const ARTBOARD = { w: 1327, h: 1133 };
@@ -74,7 +73,7 @@ export const PARTS: Record<PartKey, PartConfig> = {
   //   options: ["1.png", "2.png", "3.png", "4.png"],
   // },
   nose: {
-    label: "Muzzle",
+    label: "Хошуу",
     position: [0.42, 0.25, 0.1598, 0.16],
     options: ["1.png", "2.png", "3.png", "4.png", "5.png"],
   },
@@ -84,22 +83,21 @@ export const PARTS: Record<PartKey, PartConfig> = {
   //   options: ["1.svg"],
   //   folder: "naruto-beard",
   // },
-  // beard: {
-  //   label: "Beard",
-  //   position: [0.2322, 0.1589, 0.7169, 0.2504],
-  //   options: ["1.svg"],
-  // },
+  hat: {
+    label: "Малгай",
+    position: [0.15, -0.2, 0.7, 0.5],
+    options: ["1.png", "2.png", "3.png", "4.png", "5.png"],
+  },
   cloth: {
-    label: "Cloth",
+    label: "Хувцас",
     position: [0, 0, 1, 1],
     options: ["1.png", "2.png", "3.png", "4.png", "5.png"],
   },
   eye: {
-    label: "Eyes",
+    label: "Нүд",
     position: [0, 0, 1, 1],
     options: ["1.png", "2.png"],
   },
-
 };
 
 export const BASE_SRC = "/create-cat/base/base.png";
