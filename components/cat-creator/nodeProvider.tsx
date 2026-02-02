@@ -33,7 +33,7 @@ export const NodeManager = ({ children }: { children: React.ReactNode }) => {
     {
       id: "cat",
       position: { x: 82, y: 81 },
-      scale: { width: 525, height: 487 },
+      scale: { width: 400, height: 487 },
       rotation: 0,
       parent: null,
       stroke: 0,

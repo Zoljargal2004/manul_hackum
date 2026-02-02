@@ -49,7 +49,7 @@ async function BuildSpecialHtmlElement(
 
   const { width, height } = node.scale;
 
-  let extra = 70;
+  let extra = 50;
 
   const dpr = window.devicePixelRatio || 1;
 
@@ -57,7 +57,7 @@ async function BuildSpecialHtmlElement(
   buffer.width = width * dpr;
   buffer.height = height * dpr + extra;
   buffer.style.width = width + "px";
-  buffer.style.height = height + "px";
+  buffer.style.height = height - extra + "px";
 
   const ctx = buffer.getContext("2d");
   if (!ctx) return;
@@ -68,7 +68,7 @@ async function BuildSpecialHtmlElement(
 
   // base
   const base = await loadImage(BASE_SRC);
-  ctx.drawImage(base, 0, extra, width, height);
+  ctx.drawImage(base, 0, extra, width, height - extra);
 
   // parts
   for (const key of DRAW_ORDER) {
@@ -83,7 +83,7 @@ async function BuildSpecialHtmlElement(
       rx * width,
       ry * height + extra,
       rw * width,
-      rh * height,
+      rh * height - extra,
     );
   }
 
