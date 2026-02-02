@@ -70,7 +70,7 @@ export const EditCat = ({
           type="button"
           onClick={() => setOpen(false)}
           variant={`ghost`}
-          className="absolute right-4 top-4 flex items-center justify-center"
+          className="absolute right-0 top-0 flex items-center justify-center"
         >
           <X />
         </Button>
@@ -83,7 +83,7 @@ export const EditCat = ({
                 <FieldLabel>{PARTS[key].label}</FieldLabel>
               </div>
 
-              <div className="flex gap-3 flex-wrap overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              <div className=" flex flex-nowrap gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {PARTS[key].options.map((file) => (
                   <Option
                     key={file}

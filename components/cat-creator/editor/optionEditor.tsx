@@ -22,7 +22,7 @@ export const Option = ({ layers, partKey, file, setLayer }: OptionProps) => {
         }
         setLayer(partKey, path);
       }}
-      className={`p-2 border rounded relative overflow-hidden  `}
+      className={`p-2 border rounded relative overflow-hidden shrink-0 `}
     >
       <img src={path} className="w-14 h-14 object-contain" />
       {active && (

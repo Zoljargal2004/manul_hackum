@@ -49,7 +49,7 @@ async function BuildSpecialHtmlElement(
 
   const { width, height } = node.scale;
 
-  let extra = 50;
+  let extra = 60;
 
   const dpr = window.devicePixelRatio || 1;
 
