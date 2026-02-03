@@ -1,8 +1,7 @@
 export type PartKey =
   // | "eyebrows"
   // | "mouth"
-  // | "fang"
-  "nose" | "shoes" | "hat" | "cloth" | "eye";
+  "beard" | "nose" | "shoes" | "hat" | "cloth" | "eye";
 
 export type PartConfig = {
   label: string;
@@ -45,10 +44,10 @@ export const DRAW_ORDER: readonly PartKey[] = [
   // "mouth",
   // "fang",
   "shoes",
-
   "nose",
   "eye",
   "cloth",
+  "beard",
   "hat",
 ];
 
@@ -65,11 +64,11 @@ export const PARTS: Record<PartKey, PartConfig> = {
   //   position: [0.5803, 0.256, 0.0821, 0.1253],
   //   options: ["1.svg"],
   // },
-  // fang: {
-  //   label: "Fang",
-  //   position: [0.5759, 0.2948, 0.0897, 0.0866],
-  //   options: ["1.png", "2.png", "3.png", "4.png"],
-  // },
+  beard: {
+    label: "Сахал",
+    position: [0.1, 0, 0.8, 0.44],
+    options: ["1.png"],
+  },
   nose: {
     label: "Хошуу",
     position: [0.42, 0.23, 0.1598, 0.25],

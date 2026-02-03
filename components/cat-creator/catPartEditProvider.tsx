@@ -77,7 +77,7 @@ const PartSelector = ({
     <>
       <div className="hidden   lg:flex fixed left-8 z-50 h-full items-center">
         <div className="h-80% bg-card flex flex-col gap-4 rounded-xl border shadow-sm py-4 px-2">
-          {DRAW_ORDER.map((part) => (
+          {DRAW_ORDER.filter(ele => ele !== "beard").map((part) => (
             <Button
               onClick={() => {
                 selectPart(part);
@@ -119,7 +119,7 @@ const PartSelector = ({
       </div>
       <div className="lg:hidden fixed bottom-2 w-full z-50 flex flex-col gap-2">
         <div className="flex  justify-center-safe w-full inset-x-auto gap-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {DRAW_ORDER.map((part) => (
+          {DRAW_ORDER.filter(ele => ele !== "beard").map((part) => (
             <Button
               onClick={() => {
                 selectPart(part);
