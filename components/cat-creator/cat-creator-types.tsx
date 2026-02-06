@@ -93,7 +93,7 @@ export const PARTS: Record<PartKey, PartConfig> = {
   eye: {
     label: "Нүд",
     position: [0, 0, 1, 1],
-    options: ["1.png", "2.png"],
+    options: ["1.png", "2.png", "3.png", "4.png", "5.png"],
   },
 };
 
