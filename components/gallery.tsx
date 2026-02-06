@@ -35,6 +35,7 @@ const GalleryFrame = ({ img }: { img: string }) => {
   return (
     <div className="bg-muted/30 rounded-2xl">
       <div className="relative h-80 rounded-lg overflow-hidden group">
+        {/* gal */}
         <img
           src={`https://raw.githubusercontent.com/Zoljargal2004/manul_hackum/refs/heads/main/public/gallery/${img}.png`}
           alt="manul"
