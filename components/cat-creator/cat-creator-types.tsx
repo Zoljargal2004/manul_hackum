@@ -77,13 +77,13 @@ export const PARTS: Record<PartKey, PartConfig> = {
   shoes: {
     label: "Гутал",
     position: [0.04, 0.7, 0.9, 0.45],
-    options: ["1.png"],
+    options: ["1.png", "2.png", "3.png"],
     folder: "shoes",
   },
   hat: {
     label: "Малгай",
     position: [0.15, -0.15, 0.7, 0.5],
-    options: ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png"],
+    options: ["1.png", "2.png", "3.png", "4.png", "5.png"],
   },
   cloth: {
     label: "Хувцас",
